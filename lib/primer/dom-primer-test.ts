@@ -1,34 +1,41 @@
-import { VirtualDocument } from 'ui-wrapper';
+import { VirtualDocument, VirtualDocumentDemo } from 'virtual-document';
 import { DomPrimer } from './dom-primer-class';
 
-describe('@DomPrimer', () => {
+describe('@DomPrimer', (): void => {
   let doc: VirtualDocument;
+  let docDemo: VirtualDocumentDemo;
   let domPrimer: DomPrimer;
-  beforeAll(() => {
+  beforeAll((): void => {
     doc = new VirtualDocument();
-    doc.createBase();
+    docDemo = new VirtualDocumentDemo({ virtualDocument: doc });
+    docDemo.createBase();
     domPrimer = new DomPrimer();
   });
 
-  describe('#start', () => {
-    beforeAll(() => {
+  describe('#start', (): void => {
+    test('testing the result of start method, by finding id', (): void => {
       const { element } = doc.makeElement({ tagName: 'dom-tag' });
-      element.id = 'dom_element';
-      const { element: target } = doc.findElementById({ id: 'root' });
-      domPrimer.start({
-        element,
-        target
-      });
-    });
+      VirtualDocument.setId({ source: element, identifier: 'dom_element' });
+      const { element: target } = doc.findElementById({ identifier: 'root' });
+      domPrimer.setElement({ element });
+      domPrimer.setTarget({ target });
+      domPrimer.start();
 
-    test('testing the result of start method, by finding id', () => {
-      const { element } = doc.findElementById({ id: 'dom_element' });
-      expect(element.tagName).toBe('dom-tag');
-    });
+      const {
+        isFound,
+        element: { tagName }
+      } = doc.findElementById({ identifier: 'dom_element' });
+      const {
+        isFound: isParentFound,
+        // eslint-disable-next-line id-length
+        parentElement: { id: parentElementId }
+      } = VirtualDocument.getParentElement({ element });
 
-    test('testing the result of start method, by checking parentElement', () => {
-      const { element } = doc.findParentElementByChildId({ id: 'dom_element' });
-      expect(element.id).toBe('root');
+      expect(isFound).toBeTruthy();
+      expect(tagName).toBe('dom-tag');
+
+      expect(isParentFound).toBeTruthy();
+      expect(parentElementId).toBe('root');
     });
   });
 });

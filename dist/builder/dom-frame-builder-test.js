@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ui_wrapper_1 = require("ui-wrapper");
+const virtual_document_1 = require("virtual-document");
 const dom_unit_demo_class_1 = require("../unit/dom-unit-demo-class");
 const dom_frame_builder_class_1 = require("./dom-frame-builder-class");
 describe('@DomFrameBuilder', () => {
     let doc;
     let domFrameBuilder;
     beforeAll(() => {
-        doc = new ui_wrapper_1.VirtualDocument();
+        doc = new virtual_document_1.VirtualDocument();
         domFrameBuilder = new dom_frame_builder_class_1.DomFrameBuilder();
     });
     describe('#buildElement', () => {
@@ -45,7 +45,7 @@ describe('@DomFrameBuilder', () => {
             const { element } = domFrameBuilder.buildElement({
                 name: dom_unit_demo_class_1.DomUnitDemo,
                 properties: {},
-                children: 'testChild'
+                children: ['testChild']
             });
             expect(element.children[0].innerHTML).toBe('testChild');
         });

@@ -1,8 +1,8 @@
 import { DomUnitSimpleDemo } from './dom-unit-simple-demo-class';
 
-describe('@DomUnit / no override', () => {
-  describe('#runMountLifeCycle', () => {
-    test('testing the unit life cycle for mounting', () => {
+describe('@DomUnit / no override', (): void => {
+  describe('#runMountLifeCycle', (): void => {
+    test('testing the unit life cycle for mounting', (): void => {
       const domUnitView: DomUnitSimpleDemo = new DomUnitSimpleDemo();
       domUnitView.runMountLifeCycle({
         properties: {}
@@ -11,8 +11,8 @@ describe('@DomUnit / no override', () => {
     });
   });
 
-  describe('#runUpdateLifeCycle', () => {
-    test('testing the unit life cycle for updating', () => {
+  describe('#runUpdateLifeCycle', (): void => {
+    test('testing the unit life cycle for updating', (): void => {
       const domUnitView: DomUnitSimpleDemo = new DomUnitSimpleDemo();
       domUnitView.runMountLifeCycle({
         properties: {}
@@ -22,8 +22,8 @@ describe('@DomUnit / no override', () => {
     });
   });
 
-  describe('#runDisposeLifeCycle', () => {
-    test('testing the unit life cycle for disposing', () => {
+  describe('#runDisposeLifeCycle', (): void => {
+    test('testing the unit life cycle for disposing', (): void => {
       const domUnitView: DomUnitSimpleDemo = new DomUnitSimpleDemo();
       domUnitView.runDisposeLifeCycle();
       expect(domUnitView.getDisposeLifeCycleResult()).toBe('');

@@ -1,9 +1,9 @@
-import { Properties, States } from 'ui-wrapper';
+import { IBasicProperties, IBasicStates } from 'ui-wrapper';
 import { TDomElement } from '../type/element-type';
-export interface DomUnitDemoProps extends Properties<TDomElement> {
+export interface IDomUnitDemoProps extends IBasicProperties<TDomElement> {
     title?: string;
 }
-export interface DomUnitDemoStates extends States {
+export interface IDomUnitDemoStates extends IBasicStates {
     testState: string;
 }
 export interface IDomUnitDemoGetStateOut<S> {

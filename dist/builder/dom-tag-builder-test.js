@@ -10,7 +10,7 @@ describe('@DomTagBuilder', () => {
         test('testing buildElement without properties and children', () => {
             const { element } = domTagBuilder.buildElement({
                 name: 'dom-tag-builder-test',
-                properties: null,
+                properties: {},
                 children: []
             });
             expect(element.tagName.toLowerCase()).toBe('dom-tag-builder-test');
@@ -42,28 +42,28 @@ describe('@DomTagBuilder', () => {
         test('testing buildElement without properties and with simple string children', () => {
             const { element } = domTagBuilder.buildElement({
                 name: 'dom-tag-builder-test',
-                properties: null,
-                children: 'children-string-test'
+                properties: {},
+                children: ['children-string-test']
             });
             expect(element.innerHTML).toBe('children-string-test');
         });
         test('testing buildElement without properties and with element children', () => {
             const { element: childElement } = domTagBuilder.buildElement({
                 name: 'dom-tag-child',
-                properties: null,
+                properties: {},
                 children: []
             });
-            const { element } = domTagBuilder.buildElement({
+            const { element: { children: { 0: { tagName } } } } = domTagBuilder.buildElement({
                 name: 'dom-tag-builder-test',
-                properties: null,
+                properties: {},
                 children: [childElement]
             });
-            expect(element.children[0] && element.children[0].tagName.toLowerCase()).toBe('dom-tag-child');
+            expect(tagName.toLowerCase()).toBe('dom-tag-child');
         });
         test('testing buildElement without properties and with array of children', () => {
             const { element } = domTagBuilder.buildElement({
                 name: 'dom-tag-builder-test',
-                properties: null,
+                properties: {},
                 children: ['firstChild', '-', 'secondChild']
             });
             expect(element.innerHTML).toBe('firstChild-secondChild');
@@ -74,7 +74,7 @@ describe('@DomTagBuilder', () => {
                 properties: {
                     name: 'domTag'
                 },
-                children: 'dom-tag-inner-text'
+                children: ['dom-tag-inner-text']
             });
             expect(element.outerHTML).toBe('<dom-tag name="domTag">dom-tag-inner-text</dom-tag>');
         });

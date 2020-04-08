@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ui_wrapper_1 = require("ui-wrapper");
+const virtual_document_1 = require("virtual-document");
 const dom_unit_class_1 = require("./dom-unit-class");
 class DomUnitDemo extends dom_unit_class_1.DomUnit {
     constructor() {
@@ -28,20 +28,24 @@ class DomUnitDemo extends dom_unit_class_1.DomUnit {
         this.disposeLifeCycleResult += 'Bd';
     }
     provide() {
-        this.doc = new ui_wrapper_1.VirtualDocument();
+        var _a;
+        this.doc = new virtual_document_1.VirtualDocument({
+            doc: document
+        });
         this.mountLifeCycleResult += 'P';
         this.updateLifeCycleResult += 'P';
         const { element } = this.doc.makeElement({ tagName: 'dom-unit-demo' });
-        element.setAttribute('title', this.props.title || '');
-        if (typeof this.props.children === 'string') {
-            element.innerHTML = this.props.children;
-        }
-        else {
-            const children = this.props.children || [];
-            children.map((child) => {
-                element.append(child);
-            });
-        }
+        virtual_document_1.VirtualDocument.setAttribute({
+            sourceElement: element,
+            attributeKey: 'title',
+            attributeValue: (_a = this.props.title, (_a !== null && _a !== void 0 ? _a : ''))
+        });
+        const { children: childrenProperty } = this.props;
+        const children = (childrenProperty !== null && childrenProperty !== void 0 ? childrenProperty : []);
+        children.map((child) => {
+            element.append(child);
+            return child;
+        });
         return { element };
     }
     getMountLifeCycleResult() {

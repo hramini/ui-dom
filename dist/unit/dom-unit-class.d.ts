@@ -1,24 +1,25 @@
-import { IElement, IUnit, IUnitAlterStateIn, IUnitOnBeforeUpdateOut, Properties, VirtualDocument } from 'ui-wrapper';
+import { IBasicProperties, IElement, IUnit, IUnitAlterStateOptions, IUnitOnBeforeUpdateCheck } from 'ui-wrapper';
+import { VirtualDocument } from 'virtual-document';
 import { TDomElement } from '../type/element-type';
 import { IDomUnitRunMountLifeCycleIn, IDomUnitRunUpdateLifeCycleIn } from './dom-unit-interface';
 export declare abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
-    props: Readonly<P> & Readonly<Properties<TDomElement>>;
+    props: Readonly<P> & Readonly<IBasicProperties<TDomElement>>;
     state: Readonly<S>;
-    private providedView;
     protected doc: VirtualDocument;
+    private providedView;
     protected constructor();
     onBeforeProvide(): void;
     onAfterProvide(): void;
-    onBeforeUpdate(): IUnitOnBeforeUpdateOut;
+    onBeforeUpdate(): IUnitOnBeforeUpdateCheck;
     onAfterUpdate(): void;
     onBeforeDispose(): void;
-    abstract provide(): IElement<TDomElement>;
     runMountLifeCycle(param: IDomUnitRunMountLifeCycleIn<P>): void;
     runUpdateLifeCycle(param: IDomUnitRunUpdateLifeCycleIn<P>): void;
     runDisposeLifeCycle(): void;
     getProvidedView(): IElement<TDomElement>;
     forceUpdate(): void;
-    alterState<K extends keyof S>(param: IUnitAlterStateIn<S, K>): void;
+    alterState<K extends keyof S>(param: IUnitAlterStateOptions<S, K>): void;
     private setProps;
     private updateElementInDocument;
+    abstract provide(): IElement<TDomElement>;
 }

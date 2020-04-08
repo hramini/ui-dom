@@ -1,23 +1,23 @@
 import { DomTagBuilder } from './dom-tag-builder-class';
 
-describe('@DomTagBuilder', () => {
+describe('@DomTagBuilder', (): void => {
   let domTagBuilder: DomTagBuilder;
-  beforeAll(() => {
+  beforeAll((): void => {
     domTagBuilder = new DomTagBuilder();
   });
 
-  describe('#buildElement', () => {
-    test('testing buildElement without properties and children', () => {
+  describe('#buildElement', (): void => {
+    test('testing buildElement without properties and children', (): void => {
       const { element } = domTagBuilder.buildElement({
         name: 'dom-tag-builder-test',
-        properties: null,
+        properties: {},
         children: []
       });
 
       expect(element.tagName.toLowerCase()).toBe('dom-tag-builder-test');
     });
 
-    test('testing buildElement with simple properties and without children', () => {
+    test('testing buildElement with simple properties and without children', (): void => {
       const { element } = domTagBuilder.buildElement({
         name: 'dom-tag-builder-test',
         properties: {
@@ -29,12 +29,12 @@ describe('@DomTagBuilder', () => {
       expect(element.getAttribute('testAttr')).toBe('test-title-attr');
     });
 
-    test('testing buildElement with eventListener properties and without children', () => {
-      let test = 'beforeClickText';
+    test('testing buildElement with eventListener properties and without children', (): void => {
+      let test: string = 'beforeClickText';
       const { element } = domTagBuilder.buildElement({
         name: 'dom-tag-builder-test',
         properties: {
-          onClick: () => {
+          onClick: (): void => {
             test = 'afterClickText';
           }
         },
@@ -44,47 +44,51 @@ describe('@DomTagBuilder', () => {
       expect(test).toBe('afterClickText');
     });
 
-    test('testing buildElement without properties and with simple string children', () => {
+    test('testing buildElement without properties and with simple string children', (): void => {
       const { element } = domTagBuilder.buildElement({
         name: 'dom-tag-builder-test',
-        properties: null,
-        children: 'children-string-test'
+        properties: {},
+        children: ['children-string-test']
       });
       expect(element.innerHTML).toBe('children-string-test');
     });
 
-    test('testing buildElement without properties and with element children', () => {
+    test('testing buildElement without properties and with element children', (): void => {
       const { element: childElement } = domTagBuilder.buildElement({
         name: 'dom-tag-child',
-        properties: null,
+        properties: {},
         children: []
       });
-      const { element } = domTagBuilder.buildElement({
+      const {
+        element: {
+          children: {
+            0: { tagName }
+          }
+        }
+      } = domTagBuilder.buildElement({
         name: 'dom-tag-builder-test',
-        properties: null,
+        properties: {},
         children: [childElement]
       });
-      expect(element.children[0] && element.children[0].tagName.toLowerCase()).toBe(
-        'dom-tag-child'
-      );
+      expect(tagName.toLowerCase()).toBe('dom-tag-child');
     });
 
-    test('testing buildElement without properties and with array of children', () => {
+    test('testing buildElement without properties and with array of children', (): void => {
       const { element } = domTagBuilder.buildElement({
         name: 'dom-tag-builder-test',
-        properties: null,
+        properties: {},
         children: ['firstChild', '-', 'secondChild']
       });
       expect(element.innerHTML).toBe('firstChild-secondChild');
     });
 
-    test('testing buildElement with both properties and children', () => {
+    test('testing buildElement with both properties and children', (): void => {
       const { element } = domTagBuilder.buildElement({
         name: 'dom-tag',
         properties: {
           name: 'domTag'
         },
-        children: 'dom-tag-inner-text'
+        children: ['dom-tag-inner-text']
       });
       expect(element.outerHTML).toBe('<dom-tag name="domTag">dom-tag-inner-text</dom-tag>');
     });

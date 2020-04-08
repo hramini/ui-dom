@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ui_wrapper_1 = require("ui-wrapper");
+const virtual_document_1 = require("virtual-document");
 const dom_unit_class_1 = require("./dom-unit-class");
 class DomUnitSimpleDemo extends dom_unit_class_1.DomUnit {
     constructor() {
         super();
-        this.doc = new ui_wrapper_1.VirtualDocument();
+        this.doc = new virtual_document_1.VirtualDocument();
         this.mountLifeCycleResult = 'C';
         this.updateLifeCycleResult = '';
         this.disposeLifeCycleResult = '';

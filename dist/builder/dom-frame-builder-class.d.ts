@@ -1,11 +1,11 @@
 import { IElement, IFrameBuilder } from 'ui-wrapper';
 import { TDomElement } from '../type/element-type';
-import { DomFrameElementOption } from './dom-builder-interface';
-export declare class DomFrameBuilder implements IFrameBuilder<TDomElement> {
-    private doc;
+import { DomBuilder } from './dom-builder-class';
+import { IDomFrameElementOption } from './dom-builder-interface';
+export declare class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomElement> {
+    private readonly doc;
     constructor();
-    buildElement<P, S>(elementOption: DomFrameElementOption<P, S>): IElement<TDomElement>;
-    private checkChildrenLength;
-    private appendChildrenToProperties;
-    private appendKeyProperties;
+    buildElement<P, S>(param: IDomFrameElementOption<P, S>): IElement<TDomElement>;
+    private static appendChildrenToProperties;
+    private static appendKeyProperties;
 }

@@ -1,11 +1,12 @@
-import { IElement, VirtualDocument } from 'ui-wrapper';
+import { IElement } from 'ui-wrapper';
+import { VirtualDocument } from 'virtual-document';
 import { TDomElement } from '../type/element-type';
 import { DomUnit } from './dom-unit-class';
-import { DomUnitDemoProps, DomUnitDemoStates } from './dom-unit-demo-interface';
+import { IDomUnitDemoProps, IDomUnitDemoStates } from './dom-unit-demo-interface';
 
-export class DomUnitSimpleDemo extends DomUnit<DomUnitDemoProps, DomUnitDemoStates> {
+export class DomUnitSimpleDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> {
   private mountLifeCycleResult: string;
-  private disposeLifeCycleResult: string;
+  private readonly disposeLifeCycleResult: string;
   private updateLifeCycleResult: string;
 
   public constructor() {
@@ -20,6 +21,7 @@ export class DomUnitSimpleDemo extends DomUnit<DomUnitDemoProps, DomUnitDemoStat
     this.mountLifeCycleResult += 'P';
     this.updateLifeCycleResult += 'P';
     const { element } = this.doc.makeElement({ tagName: 'dom-unit-demo' });
+
     return { element };
   }
 

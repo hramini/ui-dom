@@ -3,15 +3,16 @@ import { DomFrameBuilder } from '../builder/dom-frame-builder-class';
 import { TDomElement } from '../type/element-type';
 import { DomUnit } from './dom-unit-class';
 import { DomUnitDemo } from './dom-unit-demo-class';
-import { DomUnitDemoProps, DomUnitDemoStates } from './dom-unit-demo-interface';
+import { IDomUnitDemoProps, IDomUnitDemoStates } from './dom-unit-demo-interface';
 
-export class DomUnitFrameDemo extends DomUnit<DomUnitDemoProps, DomUnitDemoStates> {
-  private builder: DomFrameBuilder;
+export class DomUnitFrameDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> {
+  private readonly builder: DomFrameBuilder;
 
   public constructor() {
     super();
     this.builder = new DomFrameBuilder();
   }
+
   public provide(): IElement<TDomElement> {
     const { element } = this.builder.buildElement({
       name: DomUnitDemo,

@@ -1,71 +1,84 @@
-import { IElement, IFrameBuilder, Properties, VirtualDocument } from 'ui-wrapper';
-import { DomContainerDemo } from '../container/dom-container-demo-class';
+import { IBasicProperties, IElement, IFrameBuilder } from 'ui-wrapper';
+import { VirtualDocument } from 'virtual-document';
+import { DomContainer } from '../container/dom-container-class';
 import { TDomElement } from '../type/element-type';
+import { DomBuilder } from './dom-builder-class';
 import {
-  DomFrameElementOption,
   IDomFrameBuilderAppendChildrenToPropertiesIn,
-  IDomFrameBuilderCheckChildrenLengthIn
+  IDomFrameBuilderAppendKeyPropertiesIn,
+  IDomFrameBuilderAppendKeyPropertiesOut,
+  IDomFrameElementOption
 } from './dom-builder-interface';
 
-export class DomFrameBuilder implements IFrameBuilder<TDomElement> {
-  private doc: VirtualDocument;
+export class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomElement> {
+  private readonly doc: VirtualDocument;
 
   public constructor() {
+    super();
     this.doc = new VirtualDocument();
   }
 
-  public buildElement<P, S>(elementOption: DomFrameElementOption<P, S>): IElement<TDomElement> {
-    const { name: Unit, properties, children } = elementOption;
-    this.appendChildrenToProperties<P>({
-      properties,
-      children
-    });
-    this.appendKeyProperties<P>(properties);
-    const { unit: unitInstance, previousTag, updateTag } = DomContainerDemo.getUnit({
-      unit: Unit,
+  public buildElement<P, S>(param: IDomFrameElementOption<P, S>): IElement<TDomElement> {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { name: Unit, children } = param;
+    let { properties } = param;
+    DomFrameBuilder.appendChildrenToProperties<P>({
+      children,
       properties
     });
-
+    const { properties: appendedKeyProperties } = DomFrameBuilder.appendKeyProperties<P>({
+      properties
+    });
+    properties = { ...appendedKeyProperties };
+    const domContainer: DomContainer = DomContainer.getInstance();
+    const { unit: unitInstance, previousTag, updateTag } = domContainer.getUnit({
+      properties,
+      unit: Unit
+    });
     const { element: unitElement } = this.doc.makeElement({
       tagName: `${Unit.name.toLowerCase()}-unit`
     });
     const { element } = unitInstance.getProvidedView();
 
-    this.doc.append({
-      source: unitElement,
-      element
+    VirtualDocument.append({
+      element,
+      source: unitElement
     });
-    this.doc.setAttribute({
-      sourceElement: unitElement,
+    VirtualDocument.setAttribute({
       attributeKey: 'pre-unit-data',
-      attributeValue: previousTag.toString()
+      attributeValue: previousTag.toString(),
+      sourceElement: unitElement
     });
-    this.doc.setAttribute({
-      sourceElement: unitElement,
+    VirtualDocument.setAttribute({
       attributeKey: 'unit-data',
+      sourceElement: unitElement,
       attributeValue: updateTag.toString()
     });
 
     return { element: unitElement };
   }
 
-  private checkChildrenLength(param: IDomFrameBuilderCheckChildrenLengthIn): boolean {
-    const { children } = param;
-    return !children || children.length > 0;
-  }
-
-  private appendChildrenToProperties<P extends Properties<TDomElement>>(
+  private static appendChildrenToProperties<P extends IBasicProperties<TDomElement>>(
     param: IDomFrameBuilderAppendChildrenToPropertiesIn<P>
   ): void {
     const { properties, children } = param;
-    if (this.checkChildrenLength({ children })) {
+    const { status: childrenLengthStatus } = DomBuilder.checkChildren({ children });
+
+    if (childrenLengthStatus) {
       properties.children = children;
     }
   }
 
-  private appendKeyProperties<P extends Properties<TDomElement>>(props: P): void {
-    if (!props.key) {
-      props.key = Math.floor(Math.random() * 1000);
+  private static appendKeyProperties<P extends IBasicProperties<TDomElement>>(
+    param: IDomFrameBuilderAppendKeyPropertiesIn<P>
+  ): IDomFrameBuilderAppendKeyPropertiesOut<P> {
+    const { properties } = param;
+    const randomRangeNumber: number = 1000;
+
+    if (typeof properties.key === 'undefined') {
+      properties.key = Math.floor(Math.random() * randomRangeNumber);
     }
+
+    return { properties };
   }
 }

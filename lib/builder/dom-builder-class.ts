@@ -1,9 +1,10 @@
-import { VirtualDocument } from 'ui-wrapper';
+import { VirtualDocument } from 'virtual-document';
 import { TDomElement } from '../type/element-type';
 import {
-  IDomBuilderAppendChildrenIn,
   IDomBuilderCheckChildrenIn,
-  IDomBuilderCheckPropertyValueType
+  IDomBuilderCheckChildrenOut,
+  IDomBuilderCheckTypeOfIn,
+  IDomBuilderCheckTypeOfOut
 } from './dom-builder-interface';
 
 export abstract class DomBuilder {
@@ -13,28 +14,17 @@ export abstract class DomBuilder {
     this.virtualDom = new VirtualDocument();
   }
 
-  private checkChildren(param: IDomBuilderCheckChildrenIn): boolean {
-    const { children } = param;
-    return !children || children.length > 0;
-  }
-
-  protected checkPropertyValueType(param: IDomBuilderCheckPropertyValueType): boolean {
+  protected static checkTypeOf<T>(param: IDomBuilderCheckTypeOfIn<T>): IDomBuilderCheckTypeOfOut {
     const { value, type } = param;
-    return typeof value === type;
+
+    // eslint-disable-next-line valid-typeof
+    return { status: typeof value === type };
   }
 
-  protected appendChildren(param: IDomBuilderAppendChildrenIn): void {
-    const { element, children } = param;
-    if (this.checkChildren({ children })) {
-      element.innerHTML = '';
-      if (this.checkPropertyValueType({ value: children, type: 'string' })) {
-        element.append(children as string);
-      } else {
-        const arrayChildren: Array<string | TDomElement> = children as Array<string | TDomElement>;
-        arrayChildren.map((child: string | TDomElement) => {
-          element.append(child);
-        });
-      }
-    }
+  protected static checkChildren(param: IDomBuilderCheckChildrenIn): IDomBuilderCheckChildrenOut {
+    const { children } = param;
+    const childrenArray: (string | TDomElement)[] = children ?? [];
+
+    return { status: childrenArray.length > 0 };
   }
 }

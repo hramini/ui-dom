@@ -1,6 +1,10 @@
-import { IPrimer, PrimerStartOptions } from 'ui-wrapper';
+import { IPrimer, IPrimerElement, IPrimerTarget } from 'ui-wrapper';
 import { TDomElement } from '../type/element-type';
 export declare class DomPrimer implements IPrimer<TDomElement> {
+    element: HTMLElement;
+    target: HTMLElement;
     constructor();
-    start(param: PrimerStartOptions<TDomElement>): void;
+    setElement(param: IPrimerElement<HTMLElement>): void;
+    setTarget(param: IPrimerTarget): void;
+    start(): void;
 }

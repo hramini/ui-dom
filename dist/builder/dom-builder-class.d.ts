@@ -1,9 +1,8 @@
-import { VirtualDocument } from 'ui-wrapper';
-import { IDomBuilderAppendChildrenIn, IDomBuilderCheckPropertyValueType } from './dom-builder-interface';
+import { VirtualDocument } from 'virtual-document';
+import { IDomBuilderCheckChildrenIn, IDomBuilderCheckChildrenOut, IDomBuilderCheckTypeOfIn, IDomBuilderCheckTypeOfOut } from './dom-builder-interface';
 export declare abstract class DomBuilder {
     protected virtualDom: VirtualDocument;
     protected constructor();
-    private checkChildren;
-    protected checkPropertyValueType(param: IDomBuilderCheckPropertyValueType): boolean;
-    protected appendChildren(param: IDomBuilderAppendChildrenIn): void;
+    protected static checkTypeOf<T>(param: IDomBuilderCheckTypeOfIn<T>): IDomBuilderCheckTypeOfOut;
+    protected static checkChildren(param: IDomBuilderCheckChildrenIn): IDomBuilderCheckChildrenOut;
 }

@@ -1,51 +1,53 @@
-import { Properties, States } from 'ui-wrapper';
+import { IBasicProperties, IBasicStates } from 'ui-wrapper';
 import { TDomElement } from '../type/element-type';
 import { DomUnit } from '../unit/dom-unit-class';
-export interface TaggedUnit {
-    unit: DomUnit<Properties<TDomElement>, States>;
+export interface ITaggedUnit {
+    unit: DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
     updateTag: number;
     previousTag: number;
 }
-export interface UnitInstance {
-    [name: string]: TaggedUnit;
+export interface IUnitInstance {
+    [name: string]: ITaggedUnit;
 }
 export interface IDomContainerGetUnitIn {
-    unit: new () => DomUnit<Properties<TDomElement>, States>;
-    properties: Properties<TDomElement>;
+    unit: new () => DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
+    properties: IBasicProperties<TDomElement>;
 }
-export interface IDomContainerGetUnitOut extends TaggedUnit {
-}
+export declare type IDomContainerGetUnitOut = ITaggedUnit;
 export interface IDomContainerFindUnitIn {
-    unit: new () => DomUnit<Properties<TDomElement>, States>;
+    unit: new () => DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
 }
 export interface IDomContainerFindUnitOut {
-    unit: DomUnit<Properties<TDomElement>, States>;
+    unit: DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
 }
 export interface IDomContainerCheckUnitExistenceIn {
-    unit: new () => DomUnit<Properties<TDomElement>, States>;
-    properties: Properties<TDomElement>;
+    unit: new () => DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
+    properties: IBasicProperties<TDomElement>;
+}
+export interface IDomContainerCheckUnitExistenceOut {
+    status: boolean;
 }
 export interface IDomContainerSetUnitIn {
-    unit: new () => DomUnit<Properties<TDomElement>, States>;
-    properties: Properties<TDomElement>;
+    unit: new () => DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
+    properties: IBasicProperties<TDomElement>;
 }
 export interface IDomContainerUpdateUnitIn {
-    unit: new () => DomUnit<Properties<TDomElement>, States>;
-    properties: Properties<TDomElement>;
+    unit: new () => DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
+    properties: IBasicProperties<TDomElement>;
 }
 export interface IDomContainerGetNewUpdateTag {
     updateTag: number;
 }
 export interface IDomContainerUpdateUnitTag {
-    taggedUnit: TaggedUnit;
+    taggedUnit: ITaggedUnit;
 }
 export interface IDomContainerGetUnitKeyNameIn {
-    unit: new () => DomUnit<Properties<TDomElement>, States>;
-    properties: Properties<TDomElement>;
+    unit: new () => DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
+    properties: IBasicProperties<TDomElement>;
 }
 export interface IDomContainerGetUnitKeyNameOut {
     unitKeyName: string;
 }
 export interface IDomContainerUpdateElementInDocumentIn {
-    taggedUnit: TaggedUnit;
+    taggedUnit: ITaggedUnit;
 }

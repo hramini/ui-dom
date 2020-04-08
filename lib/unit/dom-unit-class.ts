@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable class-methods-use-this */
 import {
+  IBasicProperties,
   IElement,
   IUnit,
-  IUnitAlterStateIn,
-  IUnitOnBeforeUpdateOut,
-  Properties,
-  VirtualDocument
+  IUnitAlterStateOptions,
+  IUnitOnBeforeUpdateCheck
 } from 'ui-wrapper';
+import { VirtualDocument } from 'virtual-document';
 import { TDomElement } from '../type/element-type';
 import {
   IDomUnitRunMountLifeCycleIn,
@@ -14,10 +16,10 @@ import {
 } from './dom-unit-interface';
 
 export abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
-  public props: Readonly<P> & Readonly<Properties<TDomElement>>;
+  public props: Readonly<P> & Readonly<IBasicProperties<TDomElement>>;
   public state: Readonly<S>;
-  private providedView: TDomElement;
   protected doc: VirtualDocument;
+  private providedView: TDomElement;
 
   protected constructor() {
     this.doc = new VirtualDocument({
@@ -27,12 +29,12 @@ export abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
 
   public onBeforeProvide(): void {}
   public onAfterProvide(): void {}
-  public onBeforeUpdate(): IUnitOnBeforeUpdateOut {
+  public onBeforeUpdate(): IUnitOnBeforeUpdateCheck {
     return { shouldUpdate: true };
   }
+
   public onAfterUpdate(): void {}
   public onBeforeDispose(): void {}
-  public abstract provide(): IElement<TDomElement>;
 
   public runMountLifeCycle(param: IDomUnitRunMountLifeCycleIn<P>): void {
     const { properties } = param;
@@ -46,6 +48,7 @@ export abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
   public runUpdateLifeCycle(param: IDomUnitRunUpdateLifeCycleIn<P>): void {
     const { properties } = param;
     const { shouldUpdate } = this.onBeforeUpdate();
+
     if (shouldUpdate) {
       this.setProps({ properties });
       const { element } = this.provide();
@@ -67,11 +70,11 @@ export abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
     this.runUpdateLifeCycle({ properties: this.props });
   }
 
-  public alterState<K extends keyof S>(param: IUnitAlterStateIn<S, K>): void {
-    const { state, callback } = param;
+  public alterState<K extends keyof S>(param: IUnitAlterStateOptions<S, K>): void {
+    const { state, callbackFunction } = param;
     this.state = { ...this.state, ...state };
     this.runUpdateLifeCycle({ properties: this.props });
-    callback && callback();
+    callbackFunction?.();
   }
 
   private setProps(param: IDomUnitSetPropsIn<P>): void {
@@ -80,21 +83,24 @@ export abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
   }
 
   private updateElementInDocument(): void {
-    const { isFound: isAttributeFound, attributeValue } = this.doc.findAttribute({
+    const { isFound: isAttributeFound, attributeValue } = VirtualDocument.findAttribute({
       sourceElement: this.providedView,
       attributeKey: 'pre-unit-data'
     });
+
     if (isAttributeFound) {
       const { isFound: isElementFound, foundElement } = this.doc.findFirstElementByQuery({
         query: `${this.providedView.tagName.toLowerCase()}[unit-data="${attributeValue}"]`
       });
 
       if (isElementFound) {
-        this.doc.replaceElements({
+        VirtualDocument.replaceElements({
           sourceElement: foundElement,
           replaceableElement: this.providedView
         });
       }
     }
   }
+
+  public abstract provide(): IElement<TDomElement>;
 }

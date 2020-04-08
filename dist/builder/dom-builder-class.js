@@ -1,32 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ui_wrapper_1 = require("ui-wrapper");
+const virtual_document_1 = require("virtual-document");
 class DomBuilder {
     constructor() {
-        this.virtualDom = new ui_wrapper_1.VirtualDocument();
+        this.virtualDom = new virtual_document_1.VirtualDocument();
     }
-    checkChildren(param) {
-        const { children } = param;
-        return !children || children.length > 0;
-    }
-    checkPropertyValueType(param) {
+    static checkTypeOf(param) {
         const { value, type } = param;
-        return typeof value === type;
+        return { status: typeof value === type };
     }
-    appendChildren(param) {
-        const { element, children } = param;
-        if (this.checkChildren({ children })) {
-            element.innerHTML = '';
-            if (this.checkPropertyValueType({ value: children, type: 'string' })) {
-                element.append(children);
-            }
-            else {
-                const arrayChildren = children;
-                arrayChildren.map((child) => {
-                    element.append(child);
-                });
-            }
-        }
+    static checkChildren(param) {
+        const { children } = param;
+        const childrenArray = (children !== null && children !== void 0 ? children : []);
+        return { status: childrenArray.length > 0 };
     }
 }
 exports.DomBuilder = DomBuilder;
