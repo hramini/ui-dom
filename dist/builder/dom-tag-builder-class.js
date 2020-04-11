@@ -13,7 +13,9 @@ class DomTagBuilder extends dom_builder_class_1.DomBuilder {
         const { name, properties, children } = param;
         const { element } = this.virtualDocument.makeElement({ tagName: name });
         DomTagBuilder.appendProperties({ element, properties });
-        DomTagBuilder.appendChildren({ element, children });
+        dom_builder_class_1.DomBuilder.appendChildrenToProperties({ properties, children });
+        const { children: childrenProperty } = properties;
+        DomTagBuilder.appendChildren({ element, children: childrenProperty });
         return { element };
     }
     static appendChildren(param) {
@@ -36,14 +38,13 @@ class DomTagBuilder extends dom_builder_class_1.DomBuilder {
     static appendProperties(param) {
         const { element, properties } = param;
         Object.entries(properties).forEach((property) => {
-            let [key] = property;
-            const [, value] = property;
+            const [key, value] = property;
             const { status } = dom_builder_class_1.DomBuilder.checkTypeOf({ value, type: 'function' });
             if (status) {
-                key = key.replace('on', '');
-                element.addEventListener(key.toLowerCase(), value);
+                const functionKey = key.replace('on', '');
+                element.addEventListener(functionKey.toLowerCase(), value);
             }
-            else {
+            else if (key !== 'children') {
                 element.setAttribute(key, value);
             }
         });

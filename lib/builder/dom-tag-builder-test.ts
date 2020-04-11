@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/indent */
+import { IDomBuilderDemoProperties, IDomBuilderDemoStates } from './dom-builder-demo-interface';
 import { DomTagBuilder } from './dom-tag-builder-class';
 
 describe('@DomTagBuilder', (): void => {
@@ -18,20 +20,26 @@ describe('@DomTagBuilder', (): void => {
     });
 
     test('testing buildElement with simple properties and without children', (): void => {
-      const { element } = domTagBuilder.buildElement({
+      const { element } = domTagBuilder.buildElement<
+        IDomBuilderDemoProperties,
+        IDomBuilderDemoStates
+      >({
         name: 'dom-tag-builder-test',
         properties: {
-          testAttr: 'test-title-attr'
+          name: 'test-title-attr'
         },
         children: []
       });
 
-      expect(element.getAttribute('testAttr')).toBe('test-title-attr');
+      expect(element.getAttribute('name')).toBe('test-title-attr');
     });
 
     test('testing buildElement with eventListener properties and without children', (): void => {
       let test: string = 'beforeClickText';
-      const { element } = domTagBuilder.buildElement({
+      const { element } = domTagBuilder.buildElement<
+        IDomBuilderDemoProperties,
+        IDomBuilderDemoStates
+      >({
         name: 'dom-tag-builder-test',
         properties: {
           onClick: (): void => {
@@ -45,7 +53,10 @@ describe('@DomTagBuilder', (): void => {
     });
 
     test('testing buildElement without properties and with simple string children', (): void => {
-      const { element } = domTagBuilder.buildElement({
+      const { element } = domTagBuilder.buildElement<
+        IDomBuilderDemoProperties,
+        IDomBuilderDemoStates
+      >({
         name: 'dom-tag-builder-test',
         properties: {},
         children: ['children-string-test']
@@ -54,7 +65,10 @@ describe('@DomTagBuilder', (): void => {
     });
 
     test('testing buildElement without properties and with element children', (): void => {
-      const { element: childElement } = domTagBuilder.buildElement({
+      const { element: childElement } = domTagBuilder.buildElement<
+        IDomBuilderDemoProperties,
+        IDomBuilderDemoStates
+      >({
         name: 'dom-tag-child',
         properties: {},
         children: []
@@ -65,7 +79,7 @@ describe('@DomTagBuilder', (): void => {
             0: { tagName }
           }
         }
-      } = domTagBuilder.buildElement({
+      } = domTagBuilder.buildElement<IDomBuilderDemoProperties, IDomBuilderDemoStates>({
         name: 'dom-tag-builder-test',
         properties: {},
         children: [childElement]
@@ -74,7 +88,10 @@ describe('@DomTagBuilder', (): void => {
     });
 
     test('testing buildElement without properties and with array of children', (): void => {
-      const { element } = domTagBuilder.buildElement({
+      const { element } = domTagBuilder.buildElement<
+        IDomBuilderDemoProperties,
+        IDomBuilderDemoStates
+      >({
         name: 'dom-tag-builder-test',
         properties: {},
         children: ['firstChild', '-', 'secondChild']
@@ -83,7 +100,10 @@ describe('@DomTagBuilder', (): void => {
     });
 
     test('testing buildElement with both properties and children', (): void => {
-      const { element } = domTagBuilder.buildElement({
+      const { element } = domTagBuilder.buildElement<
+        IDomBuilderDemoProperties,
+        IDomBuilderDemoStates
+      >({
         name: 'dom-tag',
         properties: {
           name: 'domTag'
@@ -91,6 +111,21 @@ describe('@DomTagBuilder', (): void => {
         children: ['dom-tag-inner-text']
       });
       expect(element.outerHTML).toBe('<dom-tag name="domTag">dom-tag-inner-text</dom-tag>');
+    });
+
+    test('expects children properties does not add to element attributes', (): void => {
+      const { element } = domTagBuilder.buildElement<
+        IDomBuilderDemoProperties,
+        IDomBuilderDemoStates
+      >({
+        name: 'dom-tag',
+        properties: {
+          children: ['domTag']
+        }
+      });
+
+      expect(element.getAttribute('children')).toBeNull();
+      expect(element.innerHTML).toBe('domTag');
     });
   });
 });

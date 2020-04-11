@@ -19,11 +19,11 @@ describe('@DomTagBuilder', () => {
             const { element } = domTagBuilder.buildElement({
                 name: 'dom-tag-builder-test',
                 properties: {
-                    testAttr: 'test-title-attr'
+                    name: 'test-title-attr'
                 },
                 children: []
             });
-            expect(element.getAttribute('testAttr')).toBe('test-title-attr');
+            expect(element.getAttribute('name')).toBe('test-title-attr');
         });
         test('testing buildElement with eventListener properties and without children', () => {
             let test = 'beforeClickText';
@@ -77,6 +77,16 @@ describe('@DomTagBuilder', () => {
                 children: ['dom-tag-inner-text']
             });
             expect(element.outerHTML).toBe('<dom-tag name="domTag">dom-tag-inner-text</dom-tag>');
+        });
+        test('expects children properties does not add to element attributes', () => {
+            const { element } = domTagBuilder.buildElement({
+                name: 'dom-tag',
+                properties: {
+                    children: ['domTag']
+                }
+            });
+            expect(element.getAttribute('children')).toBeNull();
+            expect(element.innerHTML).toBe('domTag');
         });
     });
 });

@@ -11,7 +11,7 @@ class DomFrameBuilder extends dom_builder_class_1.DomBuilder {
     buildElement(param) {
         const { name: Unit, children } = param;
         let { properties } = param;
-        DomFrameBuilder.appendChildrenToProperties({
+        dom_builder_class_1.DomBuilder.appendChildrenToProperties({
             children,
             properties
         });
@@ -43,13 +43,6 @@ class DomFrameBuilder extends dom_builder_class_1.DomBuilder {
             attributeValue: updateTag.toString()
         });
         return { element: unitElement };
-    }
-    static appendChildrenToProperties(param) {
-        const { properties, children } = param;
-        const { status: childrenLengthStatus } = dom_builder_class_1.DomBuilder.checkChildren({ children });
-        if (childrenLengthStatus) {
-            properties.children = children;
-        }
     }
     static appendKeyProperties(param) {
         const { properties } = param;

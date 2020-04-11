@@ -32,7 +32,7 @@ export interface IDomFrameElementOption<P, S> extends IFrameElementOption<TDomEl
   name: new () => DomUnit<P, S>;
 }
 
-export interface IDomFrameBuilderAppendChildrenToPropertiesIn<P> {
+export interface IDomBuilderAppendChildrenToPropertiesIn<P> {
   properties: P;
   children?: (string | TDomElement)[];
 }

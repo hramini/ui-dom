@@ -18,11 +18,15 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
     });
   }
 
-  public buildElement<P, S>(param: ITagElementOption<TDomElement, P, S>): IElement<TDomElement> {
+  public buildElement<P extends IBasicProperties<TDomElement>, S>(
+    param: ITagElementOption<TDomElement, P, S>
+  ): IElement<TDomElement> {
     const { name, properties, children } = param;
     const { element } = this.virtualDocument.makeElement({ tagName: name });
     DomTagBuilder.appendProperties<P>({ element, properties });
-    DomTagBuilder.appendChildren({ element, children });
+    DomBuilder.appendChildrenToProperties({ properties, children });
+    const { children: childrenProperty } = properties;
+    DomTagBuilder.appendChildren({ element, children: childrenProperty });
 
     return { element };
   }
@@ -53,14 +57,14 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
     const { element, properties } = param;
 
     Object.entries(properties).forEach((property: PropertyEntriesType): void => {
-      let [key] = property;
-      const [, value] = property;
+      const [key, value] = property;
       const { status } = DomBuilder.checkTypeOf({ value, type: 'function' });
 
+      // TODO: the else if condition should be change when validator class is ready
       if (status) {
-        key = key.replace('on', '');
-        element.addEventListener(key.toLowerCase(), value as EventListener);
-      } else {
+        const functionKey: string = key.replace('on', '');
+        element.addEventListener(functionKey.toLowerCase(), value as EventListener);
+      } else if (key !== 'children') {
         element.setAttribute(key, value as string);
       }
     });

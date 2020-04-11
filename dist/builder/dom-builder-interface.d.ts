@@ -24,7 +24,7 @@ export interface IDomBuilderCheckChildrenOut {
 export interface IDomFrameElementOption<P, S> extends IFrameElementOption<TDomElement, P, S> {
     name: new () => DomUnit<P, S>;
 }
-export interface IDomFrameBuilderAppendChildrenToPropertiesIn<P> {
+export interface IDomBuilderAppendChildrenToPropertiesIn<P> {
     properties: P;
     children?: (string | TDomElement)[];
 }

@@ -1,6 +1,8 @@
+import { IBasicProperties } from 'ui-wrapper';
 import { VirtualDocument } from 'virtual-document';
 import { TDomElement } from '../type/element-type';
 import {
+  IDomBuilderAppendChildrenToPropertiesIn,
   IDomBuilderCheckChildrenIn,
   IDomBuilderCheckChildrenOut,
   IDomBuilderCheckTypeOfIn,
@@ -26,5 +28,16 @@ export abstract class DomBuilder {
     const childrenArray: (string | TDomElement)[] = children ?? [];
 
     return { status: childrenArray.length > 0 };
+  }
+
+  protected static appendChildrenToProperties<P extends IBasicProperties<TDomElement>>(
+    param: IDomBuilderAppendChildrenToPropertiesIn<P>
+  ): void {
+    const { properties, children } = param;
+    const { status: childrenLengthStatus } = DomBuilder.checkChildren({ children });
+
+    if (childrenLengthStatus) {
+      properties.children = children;
+    }
   }
 }

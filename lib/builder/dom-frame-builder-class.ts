@@ -4,7 +4,6 @@ import { DomContainer } from '../container/dom-container-class';
 import { TDomElement } from '../type/element-type';
 import { DomBuilder } from './dom-builder-class';
 import {
-  IDomFrameBuilderAppendChildrenToPropertiesIn,
   IDomFrameBuilderAppendKeyPropertiesIn,
   IDomFrameBuilderAppendKeyPropertiesOut,
   IDomFrameElementOption
@@ -18,11 +17,13 @@ export class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomEle
     this.doc = new VirtualDocument();
   }
 
-  public buildElement<P, S>(param: IDomFrameElementOption<P, S>): IElement<TDomElement> {
+  public buildElement<P extends IBasicProperties<TDomElement>, S>(
+    param: IDomFrameElementOption<P, S>
+  ): IElement<TDomElement> {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { name: Unit, children } = param;
     let { properties } = param;
-    DomFrameBuilder.appendChildrenToProperties<P>({
+    DomBuilder.appendChildrenToProperties<P>({
       children,
       properties
     });
@@ -56,17 +57,6 @@ export class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomEle
     });
 
     return { element: unitElement };
-  }
-
-  private static appendChildrenToProperties<P extends IBasicProperties<TDomElement>>(
-    param: IDomFrameBuilderAppendChildrenToPropertiesIn<P>
-  ): void {
-    const { properties, children } = param;
-    const { status: childrenLengthStatus } = DomBuilder.checkChildren({ children });
-
-    if (childrenLengthStatus) {
-      properties.children = children;
-    }
   }
 
   private static appendKeyProperties<P extends IBasicProperties<TDomElement>>(
