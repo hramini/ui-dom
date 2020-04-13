@@ -6,17 +6,35 @@ describe('@DomPrimer', () => {
     let doc;
     let docDemo;
     let domPrimer;
-    beforeAll(() => {
+    const domTagName = 'dom-tag';
+    const rootId = 'root';
+    beforeEach(() => {
         doc = new virtual_document_1.VirtualDocument();
         docDemo = new virtual_document_1.VirtualDocumentDemo({ virtualDocument: doc });
         docDemo.createBase();
         domPrimer = new dom_primer_class_1.DomPrimer();
     });
+    describe('#setElement', () => {
+        test('expects to set value to "element" property', () => {
+            const { element } = doc.makeElement({ tagName: domTagName });
+            domPrimer.setElement({ element });
+            const { element: { tagName: elementTagName } } = domPrimer;
+            expect(elementTagName).toBe(domTagName);
+        });
+    });
+    describe('#setTarget', () => {
+        test('expects to set value to "target" property', () => {
+            const { element: target } = doc.findElementById({ identifier: rootId });
+            domPrimer.setTarget({ target });
+            const { target: { id: targetId } } = domPrimer;
+            expect(targetId).toBe(rootId);
+        });
+    });
     describe('#start', () => {
-        test('testing the result of start method, by finding id', () => {
-            const { element } = doc.makeElement({ tagName: 'dom-tag' });
+        test('expects to append element value into target', () => {
+            const { element } = doc.makeElement({ tagName: domTagName });
             virtual_document_1.VirtualDocument.setId({ source: element, identifier: 'dom_element' });
-            const { element: target } = doc.findElementById({ identifier: 'root' });
+            const { element: target } = doc.findElementById({ identifier: rootId });
             domPrimer.setElement({ element });
             domPrimer.setTarget({ target });
             domPrimer.start();

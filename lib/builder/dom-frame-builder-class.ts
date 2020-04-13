@@ -31,7 +31,7 @@ export class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomEle
       properties
     });
     properties = { ...appendedKeyProperties };
-    const domContainer: DomContainer = DomContainer.getInstance();
+    const { domContainer } = DomContainer.getInstance();
     const { unit: unitInstance, previousTag, updateTag } = domContainer.getUnit({
       properties,
       unit: Unit
@@ -65,7 +65,9 @@ export class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomEle
     const { properties } = param;
     const randomRangeNumber: number = 1000;
 
+    // TODO: using validator class for this condition
     if (typeof properties.key === 'undefined') {
+      // TODO: using Math class for this line
       properties.key = Math.floor(Math.random() * randomRangeNumber);
     }
 

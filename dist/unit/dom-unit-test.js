@@ -5,33 +5,36 @@ const dom_unit_demo_class_1 = require("./dom-unit-demo-class");
 const dom_unit_frame_demo_class_1 = require("./dom-unit-frame-demo-class");
 describe('@DomUnit', () => {
     describe('#runMountLifeCycle', () => {
-        test('testing the unit life cycle for mounting', () => {
+        const mountLifeCycleText = 'CBpPAp';
+        test(`expects mountLifeCycleResult to be ${mountLifeCycleText}`, () => {
             const domUnitView = new dom_unit_demo_class_1.DomUnitDemo();
             domUnitView.runMountLifeCycle({
                 properties: {}
             });
-            expect(domUnitView.getMountLifeCycleResult()).toBe('CBpPAp');
+            expect(domUnitView.getMountLifeCycleResult()).toBe(mountLifeCycleText);
         });
     });
     describe('#runUpdateLifeCycle', () => {
-        test('testing the unit life cycle for updating', () => {
+        const updateLifeCycleText = 'BuPAu';
+        const shouldNotUpdateLifeCycleText = 'Bu';
+        test(`expects updateLifeCycleResult to be ${updateLifeCycleText}`, () => {
             const domUnitView = new dom_unit_demo_class_1.DomUnitDemo();
             domUnitView.runMountLifeCycle({
                 properties: {}
             });
             domUnitView.runUpdateLifeCycle({ properties: {} });
-            expect(domUnitView.getUpdateLifeCycleResult()).toBe('BuPAu');
+            expect(domUnitView.getUpdateLifeCycleResult()).toBe(updateLifeCycleText);
         });
-        test('testing the unit life cycle for updating, when onBeforeUpdate does not allow user to update', () => {
+        test(`expects updateLifeCycleResult to be ${shouldNotUpdateLifeCycleText} when #onBeforeUpdate return value is "false"`, () => {
             const domUnitView = new dom_unit_demo_class_1.DomUnitDemo();
             domUnitView.runMountLifeCycle({
                 properties: {}
             });
             domUnitView.changeOnBeforeUpdateReturn(false);
             domUnitView.runUpdateLifeCycle({ properties: {} });
-            expect(domUnitView.getUpdateLifeCycleResult()).toBe('Bu');
+            expect(domUnitView.getUpdateLifeCycleResult()).toBe(shouldNotUpdateLifeCycleText);
         });
-        test('testing the updated element after update', () => {
+        test('expects all element unit data to be null', () => {
             const domUnitView = new dom_unit_demo_class_1.DomUnitDemo();
             domUnitView.runMountLifeCycle({
                 properties: {}
@@ -48,7 +51,7 @@ describe('@DomUnit', () => {
             expect(afterElementPreUnitData).toBeNull();
             expect(afterElementUnitData).toBeNull();
         });
-        test('element could not be found in DOM because it is not appended', () => {
+        test('expects element could not be found in DOM because it is not appended', () => {
             const domUnitFrameDemo = new dom_unit_frame_demo_class_1.DomUnitFrameDemo();
             domUnitFrameDemo.runMountLifeCycle({
                 properties: {}
@@ -75,13 +78,17 @@ describe('@DomUnit', () => {
             expect(isElementInDocBeforeUpdateFound).toBeFalsy();
             expect(isElementInDocAfterUpdateFound).toBeFalsy();
         });
-        test('element could be found in DOM because it is appended with changed unit-data after unit update', () => {
+        test('expects element could be found in DOM because it is appended with changed unit-data after unit update', () => {
             const domUnitFrameDemo = new dom_unit_frame_demo_class_1.DomUnitFrameDemo();
+            const virtualDocument = new virtual_document_1.VirtualDocument({ doc: document });
             domUnitFrameDemo.runMountLifeCycle({
                 properties: {}
             });
             const { element: beforeElement } = domUnitFrameDemo.getProvidedView();
-            document.body.append(beforeElement);
+            const { elementCollection: { 0: bodyElement } } = virtualDocument.findElementsByTagNameInDoc({
+                tagName: 'body'
+            });
+            virtual_document_1.VirtualDocument.append({ source: bodyElement, element: beforeElement });
             domUnitFrameDemo.runUpdateLifeCycle({ properties: {} });
             const { element: afterElement } = domUnitFrameDemo.getProvidedView();
             const { attributeValue: beforeElementPreUnitData } = virtual_document_1.VirtualDocument.findAttribute({
@@ -106,59 +113,67 @@ describe('@DomUnit', () => {
         });
     });
     describe('#runDisposeLifeCycle', () => {
-        test('testing the unit life cycle for disposing', () => {
+        const disposeLifeCycleText = 'Bd';
+        test(`expects disposeLifeCycleResult to be ${disposeLifeCycleText}`, () => {
             const domUnitView = new dom_unit_demo_class_1.DomUnitDemo();
             domUnitView.runDisposeLifeCycle();
-            expect(domUnitView.getDisposeLifeCycleResult()).toBe('Bd');
+            expect(domUnitView.getDisposeLifeCycleResult()).toBe(disposeLifeCycleText);
         });
     });
     describe('#getProvidedView', () => {
-        test('get provided view before running mount life cycle', () => {
+        const domUnitTagName = 'dom-unit-demo';
+        test('expects provided view to be undefined before running mount life cycle', () => {
             const domUnitView = new dom_unit_demo_class_1.DomUnitDemo();
             const { element } = domUnitView.getProvidedView();
             expect(element).toBeUndefined();
         });
-        test('get provided view after running mount life cycle', () => {
+        test(`expects the return value of provided view to be an element with "${domUnitTagName}" after running mount life cycle`, () => {
             const domUnitView = new dom_unit_demo_class_1.DomUnitDemo();
             domUnitView.runMountLifeCycle({ properties: {} });
-            const { element } = domUnitView.getProvidedView();
-            expect(element.tagName.toLowerCase()).toBe('dom-unit-demo');
+            const { element: { tagName: elementTagName } } = domUnitView.getProvidedView();
+            expect(elementTagName.toLowerCase()).toBe(domUnitTagName);
         });
     });
     describe('#forceUpdate', () => {
-        test('testing force update', () => {
+        const updateLifeCycleText = 'BuPAu';
+        test(`expects updateLifeCycleResult to be ${updateLifeCycleText}`, () => {
             const domUnitView = new dom_unit_demo_class_1.DomUnitDemo();
             domUnitView.runMountLifeCycle({
                 properties: {}
             });
             domUnitView.forceUpdate();
-            expect(domUnitView.getUpdateLifeCycleResult()).toBe('BuPAu');
+            expect(domUnitView.getUpdateLifeCycleResult()).toBe(updateLifeCycleText);
         });
     });
     describe('#alterState', () => {
-        test('testing state object after alter state', () => {
+        const updateLifeCycleText = 'BuPAu';
+        const testStateText = 'changed';
+        const callbackText = 'modified';
+        test(`expects updateLifeCycleResult to be ${updateLifeCycleText} and "testState" of state object to be "${testStateText}"`, () => {
             const domUnitView = new dom_unit_demo_class_1.DomUnitDemo();
             domUnitView.runMountLifeCycle({
                 properties: {}
             });
-            domUnitView.alterState({ state: { testState: 'changed' } });
-            const { state } = domUnitView.getState();
-            expect(state.testState).toBe('changed');
-            expect(domUnitView.getUpdateLifeCycleResult()).toBe('BuPAu');
+            domUnitView.alterState({ state: { testState: testStateText } });
+            const { state: { testState } } = domUnitView.getState();
+            expect(testState).toBe(testStateText);
+            expect(domUnitView.getUpdateLifeCycleResult()).toBe(updateLifeCycleText);
         });
-        test('testing alter state with callback', () => {
+        test('expects callbackFunction to change the text properly', () => {
             let testForCallback = '';
             const domUnitView = new dom_unit_demo_class_1.DomUnitDemo();
             domUnitView.runMountLifeCycle({
                 properties: {}
             });
             domUnitView.alterState({
-                state: { testState: 'changed' },
+                state: { testState: testStateText },
                 callbackFunction: () => {
-                    testForCallback = 'modified';
+                    testForCallback = callbackText;
                 }
             });
-            expect(testForCallback).toBe('modified');
+            const { state: { testState } } = domUnitView.getState();
+            expect(testState).toBe(testStateText);
+            expect(testForCallback).toBe(callbackText);
         });
     });
 });

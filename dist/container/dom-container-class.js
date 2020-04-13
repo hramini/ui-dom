@@ -44,7 +44,10 @@ class DomContainer {
         return { status: !!taggedUnit };
     }
     static getInstance() {
-        return DomContainer.DOM_CONTAINER;
+        if (DomContainer.domContainer === undefined) {
+            DomContainer.domContainer = new DomContainer();
+        }
+        return { domContainer: DomContainer.domContainer };
     }
     static updateUnitTag(param) {
         const { taggedUnit } = param;
@@ -65,4 +68,3 @@ class DomContainer {
     }
 }
 exports.DomContainer = DomContainer;
-DomContainer.DOM_CONTAINER = new DomContainer();

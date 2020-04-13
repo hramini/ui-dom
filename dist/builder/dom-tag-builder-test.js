@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const virtual_document_1 = require("virtual-document");
 const dom_tag_builder_class_1 = require("./dom-tag-builder-class");
 describe('@DomTagBuilder', () => {
     let domTagBuilder;
@@ -7,86 +8,108 @@ describe('@DomTagBuilder', () => {
         domTagBuilder = new dom_tag_builder_class_1.DomTagBuilder();
     });
     describe('#buildElement', () => {
-        test('testing buildElement without properties and children', () => {
-            const { element } = domTagBuilder.buildElement({
-                name: 'dom-tag-builder-test',
-                properties: {},
-                children: []
+        const domTagName = 'dom-tag-builder-test';
+        const nameAttribute = 'test-title-attr';
+        const elementInnerHtmlText = 'children-string-test';
+        const elementInnerHtmlTextFirst = 'children-string-test-first';
+        const elementInnerHtmlTextSecond = 'children-string-test-second';
+        test(`expects to build an element without properties and children having ${domTagName} as tagName`, () => {
+            const { element: { tagName: elementTagName } } = domTagBuilder.buildElement({
+                name: domTagName,
+                properties: {}
             });
-            expect(element.tagName.toLowerCase()).toBe('dom-tag-builder-test');
+            expect(elementTagName.toLowerCase()).toBe(domTagName);
         });
-        test('testing buildElement with simple properties and without children', () => {
+        test(`expects to build an element with simple properties and without children having "${nameAttribute}" as an attribute with "name" key`, () => {
             const { element } = domTagBuilder.buildElement({
-                name: 'dom-tag-builder-test',
+                name: domTagName,
                 properties: {
-                    name: 'test-title-attr'
-                },
-                children: []
+                    name: nameAttribute
+                }
             });
-            expect(element.getAttribute('name')).toBe('test-title-attr');
+            const { isFound, attributeValue } = virtual_document_1.VirtualDocument.findAttribute({
+                sourceElement: element,
+                attributeKey: 'name'
+            });
+            expect(isFound).toBeTruthy();
+            expect(attributeValue).toBe(nameAttribute);
         });
-        test('testing buildElement with eventListener properties and without children', () => {
-            let test = 'beforeClickText';
+        test('expects to build an element with eventListener properties and without children having a click event listener', () => {
+            const afterText = 'afterClickText';
+            let testText = 'beforeClickText';
             const { element } = domTagBuilder.buildElement({
-                name: 'dom-tag-builder-test',
+                name: domTagName,
                 properties: {
                     onClick: () => {
-                        test = 'afterClickText';
+                        testText = afterText;
                     }
                 },
                 children: []
             });
             element.click();
-            expect(test).toBe('afterClickText');
+            expect(testText).toBe(afterText);
         });
-        test('testing buildElement without properties and with simple string children', () => {
-            const { element } = domTagBuilder.buildElement({
-                name: 'dom-tag-builder-test',
+        test(`expects to build an element without properties and with simple children having "${elementInnerHtmlText}" as inner html of element`, () => {
+            const { element: { innerHTML: elementInnerHtml } } = domTagBuilder.buildElement({
+                name: domTagName,
                 properties: {},
-                children: ['children-string-test']
+                children: [elementInnerHtmlText]
             });
-            expect(element.innerHTML).toBe('children-string-test');
+            expect(elementInnerHtml).toBe(elementInnerHtmlText);
         });
-        test('testing buildElement without properties and with element children', () => {
+        test(`expects to build an element without properties and with element children having an element in its children with "${domTagName}" tagName`, () => {
             const { element: childElement } = domTagBuilder.buildElement({
-                name: 'dom-tag-child',
+                name: domTagName,
                 properties: {},
                 children: []
             });
             const { element: { children: { 0: { tagName } } } } = domTagBuilder.buildElement({
-                name: 'dom-tag-builder-test',
+                name: 'dom-tag-parent',
                 properties: {},
                 children: [childElement]
             });
-            expect(tagName.toLowerCase()).toBe('dom-tag-child');
+            expect(tagName.toLowerCase()).toBe(domTagName);
         });
-        test('testing buildElement without properties and with array of children', () => {
-            const { element } = domTagBuilder.buildElement({
-                name: 'dom-tag-builder-test',
+        test(`expects to build an element without properties and with simple children having "${elementInnerHtmlTextFirst}-${elementInnerHtmlTextSecond}" as inner html of element`, () => {
+            const { element: { innerHTML: elementInnerHtml } } = domTagBuilder.buildElement({
+                name: domTagName,
                 properties: {},
-                children: ['firstChild', '-', 'secondChild']
+                children: [elementInnerHtmlTextFirst, '-', elementInnerHtmlTextSecond]
             });
-            expect(element.innerHTML).toBe('firstChild-secondChild');
+            expect(elementInnerHtml).toBe(`${elementInnerHtmlTextFirst}-${elementInnerHtmlTextSecond}`);
         });
-        test('testing buildElement with both properties and children', () => {
+        test(`expects to build an element with both properties and children having "${nameAttribute}" as an attribute with "name" key and "${elementInnerHtmlText}" as inner html of element`, () => {
             const { element } = domTagBuilder.buildElement({
-                name: 'dom-tag',
+                name: domTagName,
                 properties: {
-                    name: 'domTag'
+                    name: nameAttribute
                 },
-                children: ['dom-tag-inner-text']
+                children: [elementInnerHtmlText]
             });
-            expect(element.outerHTML).toBe('<dom-tag name="domTag">dom-tag-inner-text</dom-tag>');
+            const { tagName: elementTagName, innerHTML: elementInnerHtml } = element;
+            const { isFound, attributeValue: nameAttributeValue } = virtual_document_1.VirtualDocument.findAttribute({
+                sourceElement: element,
+                attributeKey: 'name'
+            });
+            expect(elementTagName.toLowerCase()).toBe(domTagName);
+            expect(elementInnerHtml).toBe(elementInnerHtmlText);
+            expect(isFound).toBeTruthy();
+            expect(nameAttributeValue).toBe(nameAttribute);
         });
-        test('expects children properties does not add to element attributes', () => {
+        test(`expects to build an element with children property and without children do not having any attribute with "children" key and "${elementInnerHtmlText}" as inner html of element`, () => {
             const { element } = domTagBuilder.buildElement({
-                name: 'dom-tag',
+                name: domTagName,
                 properties: {
-                    children: ['domTag']
+                    children: [elementInnerHtmlText]
                 }
             });
-            expect(element.getAttribute('children')).toBeNull();
-            expect(element.innerHTML).toBe('domTag');
+            const { isFound } = virtual_document_1.VirtualDocument.findAttribute({
+                sourceElement: element,
+                attributeKey: 'children'
+            });
+            const { innerHTML: elementInnerHtml } = element;
+            expect(isFound).toBeFalsy();
+            expect(elementInnerHtml).toBe(elementInnerHtmlText);
         });
     });
 });

@@ -9,9 +9,6 @@ export interface IDomTagBuilderAppendChildrenIn {
     element: TDomElement;
     children?: (string | TDomElement)[];
 }
-export interface IDomBuilderCheckPropertyValueTypeIn {
-    children?: string | (string | TDomElement)[];
-}
 export interface IDomBuilderCheckPropertyValueTypeOut {
     status: boolean;
 }

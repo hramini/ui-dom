@@ -3,38 +3,45 @@ import { DomContainer } from './dom-container-class';
 
 describe('@DomContainer', (): void => {
   let domContainer: DomContainer;
-  beforeAll((): void => {
-    domContainer = DomContainer.getInstance();
+  beforeEach((): void => {
+    const { domContainer: domContainerInstance } = DomContainer.getInstance();
+    domContainer = domContainerInstance;
+  });
+
+  describe('$#getInstance', (): void => {
+    test('expects to be an instance of @DomContainer', (): void => {
+      const { domContainer: domContainerInstance } = DomContainer.getInstance();
+
+      expect(domContainerInstance).toBeInstanceOf(DomContainer);
+    });
   });
 
   describe('#getUnit', (): void => {
-    /*
-     * test('get unit of a dom unit should be defined', (): void => {
-     *   const { unit, previousTag } = DomContainerDemo.getUnit({ unit: DomUnitDemo, properties: {} });
-     *   expect(unit).toBeDefined();
-     *   expect(previousTag).toBe(0);
-     * });
-     */
+    const mountLifeCycleText: string = 'CBpPAp';
+    const updateLifeCycleText: string = 'BuPAu';
 
-    test('check mount life cycle of DomUnitDemo after getting unit', (): void => {
+    test(`expects mountLifeCycleText to be ${mountLifeCycleText} after getting unit for the first time`, (): void => {
       const { unit } = domContainer.getUnit({ unit: DomUnitDemo, properties: { key: 1 } });
       const domUnit: DomUnitDemo = unit as DomUnitDemo;
-      expect(domUnit.getMountLifeCycleResult()).toBe('CBpPAp');
+
+      expect(domUnit.getMountLifeCycleResult()).toBe(mountLifeCycleText);
     });
 
-    test('check update life cycle of DomUnitDemo after getting existed unit', (): void => {
+    test(`expects updateLifeCycleText to be ${updateLifeCycleText} after getting unit for the second and more time`, (): void => {
       domContainer.getUnit({ unit: DomUnitDemo, properties: {} });
       const { unit: updatedUnit } = domContainer.getUnit({ unit: DomUnitDemo, properties: {} });
       const domUnit: DomUnitDemo = updatedUnit as DomUnitDemo;
-      expect(domUnit.getUpdateLifeCycleResult()).toBe('BuPAu');
+
+      expect(domUnit.getUpdateLifeCycleResult()).toBe(updateLifeCycleText);
     });
 
-    test('check update life cycle of DomUnitDemo after getting existed unit', (): void => {
+    test('expects updateTags to be different each times this method is called for the same unit', (): void => {
       const { updateTag } = domContainer.getUnit({ unit: DomUnitDemo, properties: {} });
       const { updateTag: updatedUnitUpdateTag } = domContainer.getUnit({
         unit: DomUnitDemo,
         properties: {}
       });
+
       expect(updateTag).not.toBe(updatedUnitUpdateTag);
     });
   });

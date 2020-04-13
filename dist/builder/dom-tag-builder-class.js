@@ -45,7 +45,11 @@ class DomTagBuilder extends dom_builder_class_1.DomBuilder {
                 element.addEventListener(functionKey.toLowerCase(), value);
             }
             else if (key !== 'children') {
-                element.setAttribute(key, value);
+                virtual_document_1.VirtualDocument.setAttribute({
+                    sourceElement: element,
+                    attributeKey: key,
+                    attributeValue: value
+                });
             }
         });
     }

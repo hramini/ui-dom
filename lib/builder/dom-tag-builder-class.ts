@@ -65,7 +65,11 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
         const functionKey: string = key.replace('on', '');
         element.addEventListener(functionKey.toLowerCase(), value as EventListener);
       } else if (key !== 'children') {
-        element.setAttribute(key, value as string);
+        VirtualDocument.setAttribute({
+          sourceElement: element,
+          attributeKey: key,
+          attributeValue: value as string
+        });
       }
     });
   }

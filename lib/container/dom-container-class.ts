@@ -4,6 +4,7 @@ import { DomUnit } from '../unit/dom-unit-class';
 import {
   IDomContainerCheckUnitExistenceIn,
   IDomContainerCheckUnitExistenceOut,
+  IDomContainerGetInstanceOut,
   IDomContainerGetNewUpdateTag,
   IDomContainerGetUnitIn,
   IDomContainerGetUnitKeyNameIn,
@@ -16,7 +17,7 @@ import {
 } from './dom-container-interface';
 
 export class DomContainer {
-  private static readonly DOM_CONTAINER: DomContainer = new DomContainer();
+  private static domContainer: DomContainer;
   private readonly units: IUnitInstance;
 
   private constructor() {
@@ -72,8 +73,13 @@ export class DomContainer {
     return { status: !!taggedUnit };
   }
 
-  public static getInstance(): DomContainer {
-    return DomContainer.DOM_CONTAINER;
+  public static getInstance(): IDomContainerGetInstanceOut {
+    // eslint-disable-next-line no-undefined
+    if (DomContainer.domContainer === undefined) {
+      DomContainer.domContainer = new DomContainer();
+    }
+
+    return { domContainer: DomContainer.domContainer };
   }
 
   private static updateUnitTag(param: IDomContainerUpdateUnitTag): void {

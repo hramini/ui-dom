@@ -1,6 +1,11 @@
 import { IBasicProperties, IBasicStates } from 'ui-wrapper';
 import { TDomElement } from '../type/element-type';
 import { DomUnit } from '../unit/dom-unit-class';
+import { DomContainer } from './dom-container-class';
+
+export interface IDomContainerGetInstanceOut {
+  domContainer: DomContainer;
+}
 
 export interface ITaggedUnit {
   unit: DomUnit<IBasicProperties<TDomElement>, IBasicStates>;

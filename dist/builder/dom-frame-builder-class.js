@@ -19,7 +19,7 @@ class DomFrameBuilder extends dom_builder_class_1.DomBuilder {
             properties
         });
         properties = Object.assign({}, appendedKeyProperties);
-        const domContainer = dom_container_class_1.DomContainer.getInstance();
+        const { domContainer } = dom_container_class_1.DomContainer.getInstance();
         const { unit: unitInstance, previousTag, updateTag } = domContainer.getUnit({
             properties,
             unit: Unit

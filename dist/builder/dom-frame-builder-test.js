@@ -11,64 +11,92 @@ describe('@DomFrameBuilder', () => {
         domFrameBuilder = new dom_frame_builder_class_1.DomFrameBuilder();
     });
     describe('#buildElement', () => {
-        test('testing buildElement without properties and children', () => {
+        const elementTagName = 'domunitdemo-unit';
+        const domUnitDemoElementTagName = 'dom-unit-demo';
+        const elementTitleAttribute = 'testTitle';
+        const elementChild = 'testChild';
+        const innerElementTagName = 'innet-test-tag';
+        const innerElementInnerHtml = 'testChildInTheP';
+        test(`expects an element without properties and children to have a ${elementTagName} tagName and an element with ${domUnitDemoElementTagName} inside`, () => {
             const { element } = domFrameBuilder.buildElement({
                 name: dom_unit_demo_class_1.DomUnitDemo,
                 properties: {},
                 children: []
             });
-            expect(element.tagName.toLowerCase()).toBe('domunitdemo-unit');
-            expect(element.getElementsByTagName('dom-unit-demo').length).toBe(1);
-        });
-        test('testing buildElement with properties and without children', () => {
-            const { element } = domFrameBuilder.buildElement({
-                name: dom_unit_demo_class_1.DomUnitDemo,
-                properties: {
-                    title: 'testTitle'
-                },
-                children: []
+            const { tagName } = element;
+            const { elementCollection: { length } } = virtual_document_1.VirtualDocument.findElementsByTagName({
+                source: element,
+                tagName: domUnitDemoElementTagName
             });
-            expect(element.children[0].getAttribute('title')).toBe('testTitle');
+            expect(tagName.toLowerCase()).toBe(elementTagName);
+            expect(length).toBe(1);
         });
-        test('testing buildElement with key property and without children', () => {
-            const { element } = domFrameBuilder.buildElement({
+        test(`expects an element with properties and without children to have an attribute with "title" as key and with ${elementTitleAttribute} as value`, () => {
+            const { element: { children: { 0: firstElementChild } } } = domFrameBuilder.buildElement({
                 name: dom_unit_demo_class_1.DomUnitDemo,
                 properties: {
-                    title: 'testTitle',
+                    title: elementTitleAttribute
+                }
+            });
+            const { isFound, attributeValue } = virtual_document_1.VirtualDocument.findAttribute({
+                sourceElement: firstElementChild,
+                attributeKey: 'title'
+            });
+            expect(isFound).toBeTruthy();
+            expect(attributeValue).toBe(elementTitleAttribute);
+        });
+        test(`expects an element with key properties and without children to have an attribute with "title" as key and with ${elementTitleAttribute} as value`, () => {
+            const { element: { children: { 0: firstElementChild } } } = domFrameBuilder.buildElement({
+                name: dom_unit_demo_class_1.DomUnitDemo,
+                properties: {
+                    title: elementTitleAttribute,
                     key: 1
-                },
-                children: []
+                }
             });
-            expect(element.children[0].getAttribute('title')).toBe('testTitle');
+            const { isFound, attributeValue } = virtual_document_1.VirtualDocument.findAttribute({
+                sourceElement: firstElementChild,
+                attributeKey: 'title'
+            });
+            expect(isFound).toBeTruthy();
+            expect(attributeValue).toBe(elementTitleAttribute);
         });
-        test('testing buildElement without properties and with single children', () => {
+        test(`expects an element without properties and with single children to its innerHTML be ${elementChild}`, () => {
+            const { element: { children: { 0: { innerHTML: firstElementChildInnerHtml } } } } = domFrameBuilder.buildElement({
+                name: dom_unit_demo_class_1.DomUnitDemo,
+                properties: {},
+                children: [elementChild]
+            });
+            expect(firstElementChildInnerHtml).toBe(elementChild);
+        });
+        test(`expects an element without properties and with array children to its innerHTML be ${elementChild} + another element with ${innerElementTagName} tagName`, () => {
+            const { element: childElement } = doc.makeElement({ tagName: innerElementTagName });
+            virtual_document_1.VirtualDocument.setInnerHtml({
+                source: childElement,
+                innerHtml: innerElementInnerHtml
+            });
             const { element } = domFrameBuilder.buildElement({
                 name: dom_unit_demo_class_1.DomUnitDemo,
                 properties: {},
-                children: ['testChild']
+                children: [elementChild, childElement]
             });
-            expect(element.children[0].innerHTML).toBe('testChild');
+            expect(element.children[0].innerHTML).toBe(`${elementChild}<${innerElementTagName}>${innerElementInnerHtml}</${innerElementTagName}>`);
         });
-        test('testing buildElement without properties and with array children', () => {
-            const { element: childElement } = doc.makeElement({ tagName: 'test-tag' });
-            childElement.innerHTML = 'testChildInTheP';
-            const { element } = domFrameBuilder.buildElement({
-                name: dom_unit_demo_class_1.DomUnitDemo,
-                properties: {},
-                children: ['testChild', childElement]
-            });
-            expect(element.children[0].innerHTML).toBe('testChild<test-tag>testChildInTheP</test-tag>');
-        });
-        test('testing buildElement with both properties and children', () => {
-            const { element } = domFrameBuilder.buildElement({
+        test(`expects an element with both properties and children to innerHTML of its children be ${elementChild} and its children attribute value with "title" key be ${elementTitleAttribute}`, () => {
+            const { element: { children: { 0: firstElementChild } } } = domFrameBuilder.buildElement({
                 name: dom_unit_demo_class_1.DomUnitDemo,
                 properties: {
-                    title: 'testTitle'
+                    title: elementTitleAttribute
                 },
-                children: ['testChild']
+                children: [elementChild]
             });
-            expect(element.children[0].getAttribute('title')).toBe('testTitle');
-            expect(element.children[0].innerHTML).toBe('testChild');
+            const { isFound, attributeValue } = virtual_document_1.VirtualDocument.findAttribute({
+                sourceElement: firstElementChild,
+                attributeKey: 'title'
+            });
+            const { innerHTML: innerHtml } = firstElementChild;
+            expect(isFound).toBeTruthy();
+            expect(attributeValue).toBe(elementTitleAttribute);
+            expect(innerHtml).toBe(elementChild);
         });
     });
 });
