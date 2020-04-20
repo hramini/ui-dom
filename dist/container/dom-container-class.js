@@ -5,43 +5,57 @@ class DomContainer {
         this.units = {};
     }
     getUnit(param) {
-        const { unit, properties } = param;
-        const { status } = this.checkUnitExistence({ unit, properties });
+        const { DomUnitConstructor, properties } = param;
+        this.DomUnitConstructor = DomUnitConstructor;
+        this.properties = properties;
+        const { status } = this.checkUnitExistence();
         if (status) {
-            this.updateUnit({ unit, properties });
+            this.updateUnit();
         }
         else {
-            this.setUnit({ unit, properties });
+            this.setUnit();
         }
-        const { unitKeyName } = DomContainer.getUnitKeyName({ unit, properties });
+        const { unitKeyName } = this.getUnitKeyName();
         const { unit: registeredUnit, updateTag, previousTag } = this.units[unitKeyName];
-        return { unit: registeredUnit, updateTag, previousTag };
+        return { previousTag, unit: registeredUnit, updateTag };
     }
-    setUnit(param) {
-        const { unit: UnitClass, properties } = param;
-        const unitInstance = new UnitClass();
-        unitInstance.runMountLifeCycle({ properties });
+    setUnit() {
+        const { properties } = this;
+        const { DomUnitConstructor } = this;
+        const domUnitInstance = new DomUnitConstructor();
+        domUnitInstance.runMountLifeCycle({ properties });
         const { updateTag } = DomContainer.getNewUpdateTag();
-        const { unitKeyName } = DomContainer.getUnitKeyName({ unit: UnitClass, properties });
+        const { unitKeyName } = this.getUnitKeyName();
         this.units[unitKeyName] = {
-            unit: unitInstance,
-            updateTag,
-            previousTag: 0
+            previousTag: 0,
+            unit: domUnitInstance,
+            updateTag
         };
     }
-    updateUnit(param) {
-        const { unit, properties } = param;
-        const { unitKeyName } = DomContainer.getUnitKeyName({ unit, properties });
-        const { [unitKeyName]: taggedUnit } = this.units;
-        const { unit: unitInstance } = taggedUnit;
-        DomContainer.updateUnitTag({ taggedUnit });
+    updateUnit() {
+        const { properties } = this;
+        const { unitInstance } = this.updateUnitTag();
         unitInstance.runUpdateLifeCycle({ properties });
     }
-    checkUnitExistence(param) {
-        const { unit, properties } = param;
-        const { unitKeyName } = DomContainer.getUnitKeyName({ unit, properties });
+    checkUnitExistence() {
+        const { unitKeyName } = this.getUnitKeyName();
         const { [unitKeyName]: taggedUnit } = this.units;
         return { status: !!taggedUnit };
+    }
+    updateUnitTag() {
+        const { unitKeyName } = this.getUnitKeyName();
+        const { [unitKeyName]: taggedUnit } = this.units;
+        const { unit: unitInstance } = taggedUnit;
+        taggedUnit.previousTag = taggedUnit.updateTag;
+        const { updateTag } = DomContainer.getNewUpdateTag();
+        taggedUnit.updateTag = updateTag;
+        return { unitInstance };
+    }
+    getUnitKeyName() {
+        const { properties: { key } } = this;
+        const { DomUnitConstructor: { name } } = this;
+        const unitKeyName = `${name}-${(key !== null && key !== void 0 ? key : '')}`;
+        return { unitKeyName };
     }
     static getInstance() {
         if (DomContainer.domContainer === undefined) {
@@ -49,22 +63,11 @@ class DomContainer {
         }
         return { domContainer: DomContainer.domContainer };
     }
-    static updateUnitTag(param) {
-        const { taggedUnit } = param;
-        taggedUnit.previousTag = taggedUnit.updateTag;
-        const { updateTag } = DomContainer.getNewUpdateTag();
-        taggedUnit.updateTag = updateTag;
-    }
     static getNewUpdateTag() {
         const downRange = 10000000;
         const upRange = 99999999;
         const randomNumber = Math.random() * upRange + downRange;
         return { updateTag: Math.floor(randomNumber) };
-    }
-    static getUnitKeyName(param) {
-        const { unit: { name }, properties: { key } } = param;
-        const unitKeyName = `${name}-${(key !== null && key !== void 0 ? key : '')}`;
-        return { unitKeyName };
     }
 }
 exports.DomContainer = DomContainer;

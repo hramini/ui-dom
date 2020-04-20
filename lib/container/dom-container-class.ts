@@ -2,78 +2,99 @@ import { IBasicProperties, IBasicStates } from 'ui-wrapper';
 import { TDomElement } from '../type/element-type';
 import { DomUnit } from '../unit/dom-unit-class';
 import {
-  IDomContainerCheckUnitExistenceIn,
   IDomContainerCheckUnitExistenceOut,
   IDomContainerGetInstanceOut,
-  IDomContainerGetNewUpdateTag,
+  IDomContainerGetNewUpdateTagOut,
   IDomContainerGetUnitIn,
-  IDomContainerGetUnitKeyNameIn,
   IDomContainerGetUnitKeyNameOut,
-  IDomContainerGetUnitOut,
-  IDomContainerSetUnitIn,
-  IDomContainerUpdateUnitIn,
-  IDomContainerUpdateUnitTag,
+  IDomContainerUpdateUnitTagOut,
+  ITaggedUnit,
   IUnitInstance
 } from './dom-container-interface';
 
 export class DomContainer {
   private static domContainer: DomContainer;
   private readonly units: IUnitInstance;
+  private DomUnitConstructor: new () => DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
+  private properties: IBasicProperties<TDomElement>;
 
   private constructor() {
     this.units = {};
   }
 
-  public getUnit(param: IDomContainerGetUnitIn): IDomContainerGetUnitOut {
-    const { unit, properties } = param;
-    const { status } = this.checkUnitExistence({ unit, properties });
+  public getUnit(param: IDomContainerGetUnitIn): ITaggedUnit {
+    const { DomUnitConstructor, properties } = param;
+    this.DomUnitConstructor = DomUnitConstructor;
+    this.properties = properties;
+    const { status } = this.checkUnitExistence();
 
     if (status) {
-      this.updateUnit({ unit, properties });
+      this.updateUnit();
     } else {
-      this.setUnit({ unit, properties });
+      this.setUnit();
     }
-    const { unitKeyName } = DomContainer.getUnitKeyName({ unit, properties });
+    const { unitKeyName } = this.getUnitKeyName();
     const { unit: registeredUnit, updateTag, previousTag } = this.units[unitKeyName];
 
-    return { unit: registeredUnit, updateTag, previousTag };
+    return { previousTag, unit: registeredUnit, updateTag };
   }
 
-  private setUnit(param: IDomContainerSetUnitIn): void {
+  private setUnit(): void {
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { unit: UnitClass, properties } = param;
-    const unitInstance: DomUnit<IBasicProperties<TDomElement>, IBasicStates> = new UnitClass();
-    unitInstance.runMountLifeCycle({ properties });
+    const { properties } = this;
+    const { DomUnitConstructor } = this;
+    const domUnitInstance: DomUnit<
+      IBasicProperties<TDomElement>,
+      IBasicStates
+    > = new DomUnitConstructor();
+    domUnitInstance.runMountLifeCycle({ properties });
     const { updateTag } = DomContainer.getNewUpdateTag();
-    const { unitKeyName } = DomContainer.getUnitKeyName({ unit: UnitClass, properties });
+    const { unitKeyName } = this.getUnitKeyName();
     this.units[unitKeyName] = {
-      unit: unitInstance,
-      updateTag,
-      previousTag: 0
+      previousTag: 0,
+      unit: domUnitInstance,
+      updateTag
     };
   }
 
-  private updateUnit(param: IDomContainerUpdateUnitIn): void {
-    const { unit, properties } = param;
-    const { unitKeyName } = DomContainer.getUnitKeyName({ unit, properties });
-    const { [unitKeyName]: taggedUnit } = this.units;
-    const { unit: unitInstance } = taggedUnit;
-
-    DomContainer.updateUnitTag({ taggedUnit });
+  private updateUnit(): void {
+    const { properties } = this;
+    const { unitInstance } = this.updateUnitTag();
     unitInstance.runUpdateLifeCycle({ properties });
   }
 
-  private checkUnitExistence(
-    param: IDomContainerCheckUnitExistenceIn
-  ): IDomContainerCheckUnitExistenceOut {
-    const { unit, properties } = param;
-    const { unitKeyName } = DomContainer.getUnitKeyName({ unit, properties });
+  private checkUnitExistence(): IDomContainerCheckUnitExistenceOut {
+    const { unitKeyName } = this.getUnitKeyName();
     const { [unitKeyName]: taggedUnit } = this.units;
 
     return { status: !!taggedUnit };
   }
 
+  private updateUnitTag(): IDomContainerUpdateUnitTagOut {
+    const { unitKeyName } = this.getUnitKeyName();
+    const { [unitKeyName]: taggedUnit } = this.units;
+    const { unit: unitInstance } = taggedUnit;
+    taggedUnit.previousTag = taggedUnit.updateTag;
+    const { updateTag } = DomContainer.getNewUpdateTag();
+    taggedUnit.updateTag = updateTag;
+
+    return { unitInstance };
+  }
+
+  private getUnitKeyName(): IDomContainerGetUnitKeyNameOut {
+    const {
+      properties: { key }
+    } = this;
+    const {
+      DomUnitConstructor: { name }
+    } = this;
+    const unitKeyName: string = `${name}-${key ?? ''}`;
+
+    return { unitKeyName };
+  }
+
   public static getInstance(): IDomContainerGetInstanceOut {
+    // TODO: use validator class for this condition
     // eslint-disable-next-line no-undefined
     if (DomContainer.domContainer === undefined) {
       DomContainer.domContainer = new DomContainer();
@@ -82,30 +103,11 @@ export class DomContainer {
     return { domContainer: DomContainer.domContainer };
   }
 
-  private static updateUnitTag(param: IDomContainerUpdateUnitTag): void {
-    const { taggedUnit } = param;
-    taggedUnit.previousTag = taggedUnit.updateTag;
-    const { updateTag } = DomContainer.getNewUpdateTag();
-    taggedUnit.updateTag = updateTag;
-  }
-
-  private static getNewUpdateTag(): IDomContainerGetNewUpdateTag {
+  private static getNewUpdateTag(): IDomContainerGetNewUpdateTagOut {
     const downRange: number = 10000000;
     const upRange: number = 99999999;
     const randomNumber: number = Math.random() * upRange + downRange;
 
     return { updateTag: Math.floor(randomNumber) };
-  }
-
-  private static getUnitKeyName(
-    param: IDomContainerGetUnitKeyNameIn
-  ): IDomContainerGetUnitKeyNameOut {
-    const {
-      unit: { name },
-      properties: { key }
-    } = param;
-    const unitKeyName: string = `${name}-${key ?? ''}`;
-
-    return { unitKeyName };
   }
 }

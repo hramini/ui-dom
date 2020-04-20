@@ -1,6 +1,6 @@
 import { VirtualDocument } from 'virtual-document';
-import { DomUnitDemo } from '../unit/dom-unit-demo-class';
-import { IDomUnitDemoProps, IDomUnitDemoStates } from '../unit/dom-unit-demo-interface';
+import { DomUnitDemo } from '../../unit/dom-unit-demo-class';
+import { IDomUnitDemoProps, IDomUnitDemoStates } from '../../unit/dom-unit-demo-interface';
 import { DomFrameBuilder } from './dom-frame-builder-class';
 
 describe('@DomFrameBuilder', (): void => {
@@ -16,14 +16,13 @@ describe('@DomFrameBuilder', (): void => {
     const domUnitDemoElementTagName: string = 'dom-unit-demo';
     const elementTitleAttribute: string = 'testTitle';
     const elementChild: string = 'testChild';
-    const innerElementTagName: string = 'innet-test-tag';
+    const innerElementTagName: string = 'inner-test-tag';
     const innerElementInnerHtml: string = 'testChildInTheP';
 
     test(`expects an element without properties and children to have a ${elementTagName} tagName and an element with ${domUnitDemoElementTagName} inside`, (): void => {
       const { element } = domFrameBuilder.buildElement<IDomUnitDemoProps, IDomUnitDemoStates>({
-        name: DomUnitDemo,
-        properties: {},
-        children: []
+        UnitConstructor: DomUnitDemo,
+        properties: {}
       });
       const { tagName } = element;
       const {
@@ -43,14 +42,14 @@ describe('@DomFrameBuilder', (): void => {
           children: { 0: firstElementChild }
         }
       } = domFrameBuilder.buildElement<IDomUnitDemoProps, IDomUnitDemoStates>({
-        name: DomUnitDemo,
+        UnitConstructor: DomUnitDemo,
         properties: {
           title: elementTitleAttribute
         }
       });
       const { isFound, attributeValue } = VirtualDocument.findAttribute({
-        sourceElement: firstElementChild as HTMLElement,
-        attributeKey: 'title'
+        attributeKey: 'title',
+        sourceElement: firstElementChild as HTMLElement
       });
 
       expect(isFound).toBeTruthy();
@@ -63,15 +62,15 @@ describe('@DomFrameBuilder', (): void => {
           children: { 0: firstElementChild }
         }
       } = domFrameBuilder.buildElement<IDomUnitDemoProps, IDomUnitDemoStates>({
-        name: DomUnitDemo,
+        UnitConstructor: DomUnitDemo,
         properties: {
-          title: elementTitleAttribute,
-          key: 1
+          key: 1,
+          title: elementTitleAttribute
         }
       });
       const { isFound, attributeValue } = VirtualDocument.findAttribute({
-        sourceElement: firstElementChild as HTMLElement,
-        attributeKey: 'title'
+        attributeKey: 'title',
+        sourceElement: firstElementChild as HTMLElement
       });
 
       expect(isFound).toBeTruthy();
@@ -86,9 +85,9 @@ describe('@DomFrameBuilder', (): void => {
           }
         }
       } = domFrameBuilder.buildElement<IDomUnitDemoProps, IDomUnitDemoStates>({
-        name: DomUnitDemo,
-        properties: {},
-        children: [elementChild]
+        UnitConstructor: DomUnitDemo,
+        children: [elementChild],
+        properties: {}
       });
 
       expect(firstElementChildInnerHtml).toBe(elementChild);
@@ -97,13 +96,13 @@ describe('@DomFrameBuilder', (): void => {
     test(`expects an element without properties and with array children to its innerHTML be ${elementChild} + another element with ${innerElementTagName} tagName`, (): void => {
       const { element: childElement } = doc.makeElement({ tagName: innerElementTagName });
       VirtualDocument.setInnerHtml({
-        source: childElement,
-        innerHtml: innerElementInnerHtml
+        innerHtml: innerElementInnerHtml,
+        source: childElement
       });
       const { element } = domFrameBuilder.buildElement<IDomUnitDemoProps, IDomUnitDemoStates>({
-        name: DomUnitDemo,
-        properties: {},
-        children: [elementChild, childElement]
+        UnitConstructor: DomUnitDemo,
+        children: [elementChild, childElement],
+        properties: {}
       });
 
       expect(element.children[0].innerHTML).toBe(
@@ -117,15 +116,15 @@ describe('@DomFrameBuilder', (): void => {
           children: { 0: firstElementChild }
         }
       } = domFrameBuilder.buildElement<IDomUnitDemoProps, IDomUnitDemoStates>({
-        name: DomUnitDemo,
+        UnitConstructor: DomUnitDemo,
+        children: [elementChild],
         properties: {
           title: elementTitleAttribute
-        },
-        children: [elementChild]
+        }
       });
       const { isFound, attributeValue } = VirtualDocument.findAttribute({
-        sourceElement: firstElementChild as HTMLElement,
-        attributeKey: 'title'
+        attributeKey: 'title',
+        sourceElement: firstElementChild as HTMLElement
       });
       const { innerHTML: innerHtml } = firstElementChild;
 

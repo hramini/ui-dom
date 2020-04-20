@@ -21,6 +21,8 @@ export abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
   protected doc: VirtualDocument;
   private providedView: TDomElement;
 
+  public abstract provide(): IElement<TDomElement>;
+
   protected constructor() {
     this.doc = new VirtualDocument({
       doc: document
@@ -84,8 +86,8 @@ export abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
 
   private updateElementInDocument(): void {
     const { isFound: isAttributeFound, attributeValue } = VirtualDocument.findAttribute({
-      sourceElement: this.providedView,
-      attributeKey: 'pre-unit-data'
+      attributeKey: 'pre-unit-data',
+      sourceElement: this.providedView
     });
 
     if (isAttributeFound) {
@@ -95,12 +97,10 @@ export abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
 
       if (isElementFound) {
         VirtualDocument.replaceElements({
-          sourceElement: foundElement,
-          replaceableElement: this.providedView
+          replaceableElement: this.providedView,
+          sourceElement: foundElement
         });
       }
     }
   }
-
-  public abstract provide(): IElement<TDomElement>;
 }

@@ -55,8 +55,8 @@ class DomUnit {
     }
     updateElementInDocument() {
         const { isFound: isAttributeFound, attributeValue } = virtual_document_1.VirtualDocument.findAttribute({
-            sourceElement: this.providedView,
-            attributeKey: 'pre-unit-data'
+            attributeKey: 'pre-unit-data',
+            sourceElement: this.providedView
         });
         if (isAttributeFound) {
             const { isFound: isElementFound, foundElement } = this.doc.findFirstElementByQuery({
@@ -64,8 +64,8 @@ class DomUnit {
             });
             if (isElementFound) {
                 virtual_document_1.VirtualDocument.replaceElements({
-                    sourceElement: foundElement,
-                    replaceableElement: this.providedView
+                    replaceableElement: this.providedView,
+                    sourceElement: foundElement
                 });
             }
         }

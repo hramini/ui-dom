@@ -42,7 +42,7 @@ describe('@DomPrimer', (): void => {
   describe('#start', (): void => {
     test('expects to append element value into target', (): void => {
       const { element } = doc.makeElement({ tagName: domTagName });
-      VirtualDocument.setId({ source: element, identifier: 'dom_element' });
+      VirtualDocument.setId({ identifier: 'dom_element', source: element });
       const { element: target } = doc.findElementById({ identifier: rootId });
       domPrimer.setElement({ element });
       domPrimer.setTarget({ target });

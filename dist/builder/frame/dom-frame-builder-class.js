@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const virtual_document_1 = require("virtual-document");
-const dom_container_class_1 = require("../container/dom-container-class");
-const dom_builder_class_1 = require("./dom-builder-class");
+const dom_container_class_1 = require("../../container/dom-container-class");
+const dom_builder_class_1 = require("../common/dom-builder-class");
 class DomFrameBuilder extends dom_builder_class_1.DomBuilder {
     constructor() {
         super();
         this.doc = new virtual_document_1.VirtualDocument();
     }
     buildElement(param) {
-        const { name: Unit, children } = param;
+        const { UnitConstructor, children } = param;
         let { properties } = param;
         dom_builder_class_1.DomBuilder.appendChildrenToProperties({
             children,
@@ -21,11 +21,11 @@ class DomFrameBuilder extends dom_builder_class_1.DomBuilder {
         properties = Object.assign({}, appendedKeyProperties);
         const { domContainer } = dom_container_class_1.DomContainer.getInstance();
         const { unit: unitInstance, previousTag, updateTag } = domContainer.getUnit({
-            properties,
-            unit: Unit
+            DomUnitConstructor: UnitConstructor,
+            properties
         });
         const { element: unitElement } = this.doc.makeElement({
-            tagName: `${Unit.name.toLowerCase()}-unit`
+            tagName: `${UnitConstructor.name.toLowerCase()}-unit`
         });
         const { element } = unitInstance.getProvidedView();
         virtual_document_1.VirtualDocument.append({
@@ -39,8 +39,8 @@ class DomFrameBuilder extends dom_builder_class_1.DomBuilder {
         });
         virtual_document_1.VirtualDocument.setAttribute({
             attributeKey: 'unit-data',
-            sourceElement: unitElement,
-            attributeValue: updateTag.toString()
+            attributeValue: updateTag.toString(),
+            sourceElement: unitElement
         });
         return { element: unitElement };
     }

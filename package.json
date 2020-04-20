@@ -8,6 +8,7 @@
   "files": ["dist"],
   "scripts": {
     "test": "jest --watchAll --coverage",
+    "lint": "eslint --ext .ts --ext .tsx --fix --ignore-pattern '**/*.d.*' --ignore-pattern node_modules . && echo 'Linted Successfully!'",
     "tsc:compile": "rm -rf ./dist && tsc -p ./tsconfig.json --declarationMap false --sourceMap false --outDir dist",
     "tsc:test": "tsc -p ./tsconfig.json --noEmitOnError false --watch",
     "dts": "dts-bundle-generator -o dist/ui-dom-types.d.ts lib/ui-dom-expose.ts"
@@ -24,7 +25,7 @@
     "eslint": "6.8.0",
     "jest": "25.1.0",
     "typescript": "3.7.5",
-    "ui-wrapper": "github:hramini/ui-wrapper",
+    "ui-wrapper": "github:hramini/ui-wrapper#testBuilder",
     "virtual-document": "github:hramini/virtual-document"
   }
 }

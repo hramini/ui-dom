@@ -5,11 +5,10 @@ const dom_unit_class_1 = require("./dom-unit-class");
 class DomUnitDemo extends dom_unit_class_1.DomUnit {
     constructor() {
         super();
-        this.mountLifeCycleResult = '';
+        this.mountLifeCycleResult = 'C';
         this.updateLifeCycleResult = '';
         this.disposeLifeCycleResult = '';
         this.onBeforeUpdateReturn = true;
-        this.mountLifeCycleResult = 'C';
     }
     onBeforeProvide() {
         this.mountLifeCycleResult += 'Bp';
@@ -36,9 +35,9 @@ class DomUnitDemo extends dom_unit_class_1.DomUnit {
         this.updateLifeCycleResult += 'P';
         const { element } = this.doc.makeElement({ tagName: 'dom-unit-demo' });
         virtual_document_1.VirtualDocument.setAttribute({
-            sourceElement: element,
             attributeKey: 'title',
-            attributeValue: (_a = this.props.title, (_a !== null && _a !== void 0 ? _a : ''))
+            attributeValue: (_a = this.props.title, (_a !== null && _a !== void 0 ? _a : '')),
+            sourceElement: element
         });
         const { children: childrenProperty } = this.props;
         const children = (childrenProperty !== null && childrenProperty !== void 0 ? childrenProperty : []);

@@ -62,15 +62,15 @@ describe('@DomUnit', () => {
             const { element: afterElement } = domUnitFrameDemo.getProvidedView();
             const virtualDocument = new virtual_document_1.VirtualDocument({ doc: document });
             const { attributeValue: beforeElementPreUnitData } = virtual_document_1.VirtualDocument.findAttribute({
-                sourceElement: beforeElement,
-                attributeKey: 'pre-unit-data'
+                attributeKey: 'pre-unit-data',
+                sourceElement: beforeElement
             });
             const { isFound: isElementInDocBeforeUpdateFound } = virtualDocument.findFirstElementByQuery({
                 query: `${beforeElementTagName.toLowerCase()}[unit-data="${beforeElementPreUnitData}"]`
             });
             const { attributeValue: afterElementPreUnitData } = virtual_document_1.VirtualDocument.findAttribute({
-                sourceElement: beforeElement,
-                attributeKey: 'pre-unit-data'
+                attributeKey: 'pre-unit-data',
+                sourceElement: beforeElement
             });
             const { isFound: isElementInDocAfterUpdateFound } = virtualDocument.findFirstElementByQuery({
                 query: `${afterElement.tagName.toLowerCase()}[unit-data="${afterElementPreUnitData}"]`
@@ -88,24 +88,24 @@ describe('@DomUnit', () => {
             const { elementCollection: { 0: bodyElement } } = virtualDocument.findElementsByTagNameInDoc({
                 tagName: 'body'
             });
-            virtual_document_1.VirtualDocument.append({ source: bodyElement, element: beforeElement });
+            virtual_document_1.VirtualDocument.append({ element: beforeElement, source: bodyElement });
             domUnitFrameDemo.runUpdateLifeCycle({ properties: {} });
             const { element: afterElement } = domUnitFrameDemo.getProvidedView();
             const { attributeValue: beforeElementPreUnitData } = virtual_document_1.VirtualDocument.findAttribute({
-                sourceElement: beforeElement,
-                attributeKey: 'pre-unit-data'
+                attributeKey: 'pre-unit-data',
+                sourceElement: beforeElement
             });
             const { attributeValue: afterElementPreUnitData } = virtual_document_1.VirtualDocument.findAttribute({
-                sourceElement: afterElement,
-                attributeKey: 'pre-unit-data'
+                attributeKey: 'pre-unit-data',
+                sourceElement: afterElement
             });
             const { attributeValue: beforeElementUnitData } = virtual_document_1.VirtualDocument.findAttribute({
-                sourceElement: beforeElement,
-                attributeKey: 'unit-data'
+                attributeKey: 'unit-data',
+                sourceElement: beforeElement
             });
             const { attributeValue: afterElementUnitData } = virtual_document_1.VirtualDocument.findAttribute({
-                sourceElement: afterElement,
-                attributeKey: 'unit-data'
+                attributeKey: 'unit-data',
+                sourceElement: afterElement
             });
             expect(beforeElementPreUnitData).not.toEqual(afterElementPreUnitData);
             expect(beforeElementUnitData).not.toEqual(afterElementUnitData);
@@ -166,10 +166,10 @@ describe('@DomUnit', () => {
                 properties: {}
             });
             domUnitView.alterState({
-                state: { testState: testStateText },
                 callbackFunction: () => {
                     testForCallback = callbackText;
-                }
+                },
+                state: { testState: testStateText }
             });
             const { state: { testState } } = domUnitView.getState();
             expect(testState).toBe(testStateText);

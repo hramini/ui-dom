@@ -1,5 +1,5 @@
 import { IBasicProperties, IBasicStates } from 'ui-wrapper';
-import { TDomElement } from '../type/element-type';
+import { TDomElement } from '../../type/element-type';
 
 export interface IDomBuilderDemoProperties extends IBasicProperties<TDomElement> {
   name?: string;

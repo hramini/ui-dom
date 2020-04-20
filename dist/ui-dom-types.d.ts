@@ -15,6 +15,7 @@ declare abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
 	state: Readonly<S>;
 	protected doc: VirtualDocument;
 	private providedView;
+	abstract provide(): IElement<TDomElement>;
 	protected constructor();
 	onBeforeProvide(): void;
 	onAfterProvide(): void;
@@ -29,16 +30,12 @@ declare abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
 	alterState<K extends keyof S>(param: IUnitAlterStateOptions<S, K>): void;
 	private setProps;
 	private updateElementInDocument;
-	abstract provide(): IElement<TDomElement>;
 }
 export interface IDomBuilderCheckChildrenIn {
 	children?: (string | TDomElement)[];
 }
 export interface IDomBuilderCheckChildrenOut {
 	status: boolean;
-}
-export interface IDomFrameElementOption<P, S> extends IFrameElementOption<TDomElement, P, S> {
-	name: new () => DomUnit<P, S>;
 }
 export interface IDomBuilderAppendChildrenToPropertiesIn<P> {
 	properties: P;
@@ -58,6 +55,9 @@ declare abstract class DomBuilder {
 	protected static checkChildren(param: IDomBuilderCheckChildrenIn): IDomBuilderCheckChildrenOut;
 	protected static appendChildrenToProperties<P extends IBasicProperties<TDomElement>>(param: IDomBuilderAppendChildrenToPropertiesIn<P>): void;
 }
+export interface IDomFrameElementOption<P, S> extends IFrameElementOption<TDomElement, P, S> {
+	UnitConstructor: new () => DomUnit<P, S>;
+}
 export declare class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomElement> {
 	private readonly doc;
 	constructor();
@@ -67,15 +67,15 @@ export declare class DomFrameBuilder extends DomBuilder implements IFrameBuilder
 export declare class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement> {
 	private readonly virtualDocument;
 	constructor();
-	buildElement<P extends IBasicProperties<TDomElement>, S>(param: ITagElementOption<TDomElement, P, S>): IElement<TDomElement>;
+	buildElement<P extends IBasicProperties<TDomElement>>(param: ITagElementOption<TDomElement, P>): IElement<TDomElement>;
 	private static appendChildren;
 	private static appendProperties;
 }
 export declare class DomPrimer implements IPrimer<TDomElement> {
-	element: HTMLElement;
+	element: TDomElement;
 	target: HTMLElement;
 	constructor();
-	setElement(param: IPrimerElement<HTMLElement>): void;
+	setElement(param: IPrimerElement<TDomElement>): void;
 	setTarget(param: IPrimerTarget): void;
 	start(): void;
 }

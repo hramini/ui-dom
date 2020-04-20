@@ -1,12 +1,12 @@
 import { IBasicProperties, IElement, ITagBuilder, ITagElementOption } from 'ui-wrapper';
 import { VirtualDocument } from 'virtual-document';
-import { TDomElement } from '../type/element-type';
-import { DomBuilder } from './dom-builder-class';
+import { TDomElement } from '../../type/element-type';
+import { DomBuilder } from '../common/dom-builder-class';
 import {
   IDomTagBuilderAppendChildrenIn,
   IDomTagBuilderAppendPropertiesIn,
   PropertyEntriesType
-} from './dom-builder-interface';
+} from './dom-tag-builder-interface';
 
 export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement> {
   private readonly virtualDocument: VirtualDocument;
@@ -18,15 +18,15 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
     });
   }
 
-  public buildElement<P extends IBasicProperties<TDomElement>, S>(
-    param: ITagElementOption<TDomElement, P, S>
+  public buildElement<P extends IBasicProperties<TDomElement>>(
+    param: ITagElementOption<TDomElement, P>
   ): IElement<TDomElement> {
     const { name, properties, children } = param;
     const { element } = this.virtualDocument.makeElement({ tagName: name });
     DomTagBuilder.appendProperties<P>({ element, properties });
-    DomBuilder.appendChildrenToProperties({ properties, children });
+    DomBuilder.appendChildrenToProperties({ children, properties });
     const { children: childrenProperty } = properties;
-    DomTagBuilder.appendChildren({ element, children: childrenProperty });
+    DomTagBuilder.appendChildren({ children: childrenProperty, element });
 
     return { element };
   }
@@ -37,15 +37,15 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
 
     if (childrenLengthStatus) {
       VirtualDocument.setInnerHtml({
-        source: element,
-        innerHtml: ''
+        innerHtml: '',
+        source: element
       });
 
       const arrayChildren: (string | TDomElement)[] = children as (string | TDomElement)[];
       arrayChildren.forEach((child: string | TDomElement): void => {
         VirtualDocument.append({
-          source: element,
-          element: child
+          element: child,
+          source: element
         });
       });
     }
@@ -58,7 +58,7 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
 
     Object.entries(properties).forEach((property: PropertyEntriesType): void => {
       const [key, value] = property;
-      const { status } = DomBuilder.checkTypeOf({ value, type: 'function' });
+      const { status } = DomBuilder.checkTypeOf({ type: 'function', value });
 
       // TODO: the else if condition should be change when validator class is ready
       if (status) {
@@ -66,9 +66,9 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
         element.addEventListener(functionKey.toLowerCase(), value as EventListener);
       } else if (key !== 'children') {
         VirtualDocument.setAttribute({
-          sourceElement: element,
           attributeKey: key,
-          attributeValue: value as string
+          attributeValue: value as string,
+          sourceElement: element
         });
       }
     });

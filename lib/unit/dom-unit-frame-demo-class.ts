@@ -1,12 +1,12 @@
-import { IElement } from 'ui-wrapper';
-import { DomFrameBuilder } from '../builder/dom-frame-builder-class';
+import { IElement, IFrameBuilder } from 'ui-wrapper';
+import { DomFrameBuilder } from '../builder/frame/dom-frame-builder-class';
 import { TDomElement } from '../type/element-type';
 import { DomUnit } from './dom-unit-class';
 import { DomUnitDemo } from './dom-unit-demo-class';
 import { IDomUnitDemoProps, IDomUnitDemoStates } from './dom-unit-demo-interface';
 
 export class DomUnitFrameDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> {
-  private readonly builder: DomFrameBuilder;
+  private readonly builder: IFrameBuilder<TDomElement>;
 
   public constructor() {
     super();
@@ -14,8 +14,8 @@ export class DomUnitFrameDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoSta
   }
 
   public provide(): IElement<TDomElement> {
-    const { element } = this.builder.buildElement({
-      name: DomUnitDemo,
+    const { element } = this.builder.buildElement<IDomUnitDemoProps, IDomUnitDemoStates>({
+      UnitConstructor: DomUnitDemo,
       properties: { key: 1 }
     });
 

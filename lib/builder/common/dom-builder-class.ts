@@ -1,13 +1,13 @@
 import { IBasicProperties } from 'ui-wrapper';
 import { VirtualDocument } from 'virtual-document';
-import { TDomElement } from '../type/element-type';
+import { TDomElement } from '../../type/element-type';
 import {
   IDomBuilderAppendChildrenToPropertiesIn,
   IDomBuilderCheckChildrenIn,
   IDomBuilderCheckChildrenOut,
   IDomBuilderCheckTypeOfIn,
   IDomBuilderCheckTypeOfOut
-} from './dom-builder-interface';
+} from '../dom-builder-interface';
 
 export abstract class DomBuilder {
   protected virtualDom: VirtualDocument;

@@ -7,6 +7,7 @@ export declare abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> 
     state: Readonly<S>;
     protected doc: VirtualDocument;
     private providedView;
+    abstract provide(): IElement<TDomElement>;
     protected constructor();
     onBeforeProvide(): void;
     onAfterProvide(): void;
@@ -21,5 +22,4 @@ export declare abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> 
     alterState<K extends keyof S>(param: IUnitAlterStateOptions<S, K>): void;
     private setProps;
     private updateElementInDocument;
-    abstract provide(): IElement<TDomElement>;
 }

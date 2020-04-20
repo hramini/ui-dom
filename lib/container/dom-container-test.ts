@@ -21,24 +21,33 @@ describe('@DomContainer', (): void => {
     const updateLifeCycleText: string = 'BuPAu';
 
     test(`expects mountLifeCycleText to be ${mountLifeCycleText} after getting unit for the first time`, (): void => {
-      const { unit } = domContainer.getUnit({ unit: DomUnitDemo, properties: { key: 1 } });
+      const { unit } = domContainer.getUnit({
+        DomUnitConstructor: DomUnitDemo,
+        properties: { key: 1 }
+      });
       const domUnit: DomUnitDemo = unit as DomUnitDemo;
 
       expect(domUnit.getMountLifeCycleResult()).toBe(mountLifeCycleText);
     });
 
     test(`expects updateLifeCycleText to be ${updateLifeCycleText} after getting unit for the second and more time`, (): void => {
-      domContainer.getUnit({ unit: DomUnitDemo, properties: {} });
-      const { unit: updatedUnit } = domContainer.getUnit({ unit: DomUnitDemo, properties: {} });
+      domContainer.getUnit({ DomUnitConstructor: DomUnitDemo, properties: {} });
+      const { unit: updatedUnit } = domContainer.getUnit({
+        DomUnitConstructor: DomUnitDemo,
+        properties: {}
+      });
       const domUnit: DomUnitDemo = updatedUnit as DomUnitDemo;
 
       expect(domUnit.getUpdateLifeCycleResult()).toBe(updateLifeCycleText);
     });
 
     test('expects updateTags to be different each times this method is called for the same unit', (): void => {
-      const { updateTag } = domContainer.getUnit({ unit: DomUnitDemo, properties: {} });
+      const { updateTag } = domContainer.getUnit({
+        DomUnitConstructor: DomUnitDemo,
+        properties: {}
+      });
       const { updateTag: updatedUnitUpdateTag } = domContainer.getUnit({
-        unit: DomUnitDemo,
+        DomUnitConstructor: DomUnitDemo,
         properties: {}
       });
 

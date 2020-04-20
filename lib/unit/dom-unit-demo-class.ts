@@ -9,14 +9,17 @@ import {
 } from './dom-unit-demo-interface';
 
 export class DomUnitDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> {
-  private mountLifeCycleResult: string = '';
-  private updateLifeCycleResult: string = '';
-  private disposeLifeCycleResult: string = '';
-  private onBeforeUpdateReturn: boolean = true;
+  private mountLifeCycleResult: string;
+  private updateLifeCycleResult: string;
+  private disposeLifeCycleResult: string;
+  private onBeforeUpdateReturn: boolean;
 
   public constructor() {
     super();
     this.mountLifeCycleResult = 'C';
+    this.updateLifeCycleResult = '';
+    this.disposeLifeCycleResult = '';
+    this.onBeforeUpdateReturn = true;
   }
 
   public onBeforeProvide(): void {
@@ -49,9 +52,9 @@ export class DomUnitDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> 
     this.updateLifeCycleResult += 'P';
     const { element } = this.doc.makeElement({ tagName: 'dom-unit-demo' });
     VirtualDocument.setAttribute({
-      sourceElement: element,
       attributeKey: 'title',
-      attributeValue: this.props.title ?? ''
+      attributeValue: this.props.title ?? '',
+      sourceElement: element
     });
     const { children: childrenProperty } = this.props;
     // TODO: use validator class for checking these kinds of conditions

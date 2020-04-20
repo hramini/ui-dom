@@ -3,14 +3,14 @@ import { TDomElement } from '../type/element-type';
 import { DomUnit } from '../unit/dom-unit-class';
 
 export class DomPrimer implements IPrimer<TDomElement> {
-  public element: HTMLElement;
+  public element: TDomElement;
   public target: HTMLElement;
 
   public constructor() {
     Object.setPrototypeOf(Unit.prototype, DomUnit.prototype);
   }
 
-  public setElement(param: IPrimerElement<HTMLElement>): void {
+  public setElement(param: IPrimerElement<TDomElement>): void {
     const { element } = param;
     this.element = element;
   }

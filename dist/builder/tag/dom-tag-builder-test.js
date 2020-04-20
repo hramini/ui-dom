@@ -28,8 +28,8 @@ describe('@DomTagBuilder', () => {
                 }
             });
             const { isFound, attributeValue } = virtual_document_1.VirtualDocument.findAttribute({
-                sourceElement: element,
-                attributeKey: 'name'
+                attributeKey: 'name',
+                sourceElement: element
             });
             expect(isFound).toBeTruthy();
             expect(attributeValue).toBe(nameAttribute);
@@ -43,53 +43,52 @@ describe('@DomTagBuilder', () => {
                     onClick: () => {
                         testText = afterText;
                     }
-                },
-                children: []
+                }
             });
             element.click();
             expect(testText).toBe(afterText);
         });
         test(`expects to build an element without properties and with simple children having "${elementInnerHtmlText}" as inner html of element`, () => {
             const { element: { innerHTML: elementInnerHtml } } = domTagBuilder.buildElement({
+                children: [elementInnerHtmlText],
                 name: domTagName,
-                properties: {},
-                children: [elementInnerHtmlText]
+                properties: {}
             });
             expect(elementInnerHtml).toBe(elementInnerHtmlText);
         });
         test(`expects to build an element without properties and with element children having an element in its children with "${domTagName}" tagName`, () => {
             const { element: childElement } = domTagBuilder.buildElement({
+                children: [],
                 name: domTagName,
-                properties: {},
-                children: []
+                properties: {}
             });
             const { element: { children: { 0: { tagName } } } } = domTagBuilder.buildElement({
+                children: [childElement],
                 name: 'dom-tag-parent',
-                properties: {},
-                children: [childElement]
+                properties: {}
             });
             expect(tagName.toLowerCase()).toBe(domTagName);
         });
         test(`expects to build an element without properties and with simple children having "${elementInnerHtmlTextFirst}-${elementInnerHtmlTextSecond}" as inner html of element`, () => {
             const { element: { innerHTML: elementInnerHtml } } = domTagBuilder.buildElement({
+                children: [elementInnerHtmlTextFirst, '-', elementInnerHtmlTextSecond],
                 name: domTagName,
-                properties: {},
-                children: [elementInnerHtmlTextFirst, '-', elementInnerHtmlTextSecond]
+                properties: {}
             });
             expect(elementInnerHtml).toBe(`${elementInnerHtmlTextFirst}-${elementInnerHtmlTextSecond}`);
         });
         test(`expects to build an element with both properties and children having "${nameAttribute}" as an attribute with "name" key and "${elementInnerHtmlText}" as inner html of element`, () => {
             const { element } = domTagBuilder.buildElement({
+                children: [elementInnerHtmlText],
                 name: domTagName,
                 properties: {
                     name: nameAttribute
-                },
-                children: [elementInnerHtmlText]
+                }
             });
             const { tagName: elementTagName, innerHTML: elementInnerHtml } = element;
             const { isFound, attributeValue: nameAttributeValue } = virtual_document_1.VirtualDocument.findAttribute({
-                sourceElement: element,
-                attributeKey: 'name'
+                attributeKey: 'name',
+                sourceElement: element
             });
             expect(elementTagName.toLowerCase()).toBe(domTagName);
             expect(elementInnerHtml).toBe(elementInnerHtmlText);
@@ -104,8 +103,8 @@ describe('@DomTagBuilder', () => {
                 }
             });
             const { isFound } = virtual_document_1.VirtualDocument.findAttribute({
-                sourceElement: element,
-                attributeKey: 'children'
+                attributeKey: 'children',
+                sourceElement: element
             });
             const { innerHTML: elementInnerHtml } = element;
             expect(isFound).toBeFalsy();
