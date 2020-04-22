@@ -33,11 +33,11 @@ class DomUnitDemo extends dom_unit_class_1.DomUnit {
         });
         this.mountLifeCycleResult += 'P';
         this.updateLifeCycleResult += 'P';
-        const { element } = this.doc.makeElement({ tagName: 'dom-unit-demo' });
+        const { element } = this.doc.createNewElement({ tagName: 'dom-unit-demo' });
         virtual_document_1.VirtualDocument.setAttribute({
             attributeKey: 'title',
             attributeValue: (_a = this.props.title, (_a !== null && _a !== void 0 ? _a : '')),
-            sourceElement: element
+            element
         });
         const { children: childrenProperty } = this.props;
         const children = (childrenProperty !== null && childrenProperty !== void 0 ? childrenProperty : []);

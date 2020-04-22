@@ -13,7 +13,7 @@ class DomUnitSimpleDemo extends dom_unit_class_1.DomUnit {
     provide() {
         this.mountLifeCycleResult += 'P';
         this.updateLifeCycleResult += 'P';
-        const { element } = this.doc.makeElement({ tagName: 'dom-unit-demo' });
+        const { element } = this.doc.createNewElement({ tagName: 'dom-unit-demo' });
         return { element };
     }
     getMountLifeCycleResult() {

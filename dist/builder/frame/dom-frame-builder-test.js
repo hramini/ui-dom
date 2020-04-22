@@ -24,7 +24,7 @@ describe('@DomFrameBuilder', () => {
             });
             const { tagName } = element;
             const { elementCollection: { length } } = virtual_document_1.VirtualDocument.findElementsByTagName({
-                source: element,
+                element,
                 tagName: domUnitDemoElementTagName
             });
             expect(tagName.toLowerCase()).toBe(elementTagName);
@@ -39,7 +39,7 @@ describe('@DomFrameBuilder', () => {
             });
             const { isFound, attributeValue } = virtual_document_1.VirtualDocument.findAttribute({
                 attributeKey: 'title',
-                sourceElement: firstElementChild
+                element: firstElementChild
             });
             expect(isFound).toBeTruthy();
             expect(attributeValue).toBe(elementTitleAttribute);
@@ -54,7 +54,7 @@ describe('@DomFrameBuilder', () => {
             });
             const { isFound, attributeValue } = virtual_document_1.VirtualDocument.findAttribute({
                 attributeKey: 'title',
-                sourceElement: firstElementChild
+                element: firstElementChild
             });
             expect(isFound).toBeTruthy();
             expect(attributeValue).toBe(elementTitleAttribute);
@@ -68,10 +68,10 @@ describe('@DomFrameBuilder', () => {
             expect(firstElementChildInnerHtml).toBe(elementChild);
         });
         test(`expects an element without properties and with array children to its innerHTML be ${elementChild} + another element with ${innerElementTagName} tagName`, () => {
-            const { element: childElement } = doc.makeElement({ tagName: innerElementTagName });
+            const { element: childElement } = doc.createNewElement({ tagName: innerElementTagName });
             virtual_document_1.VirtualDocument.setInnerHtml({
-                innerHtml: innerElementInnerHtml,
-                source: childElement
+                element: childElement,
+                innerHtml: innerElementInnerHtml
             });
             const { element } = domFrameBuilder.buildElement({
                 UnitConstructor: dom_unit_demo_class_1.DomUnitDemo,
@@ -90,7 +90,7 @@ describe('@DomFrameBuilder', () => {
             });
             const { isFound, attributeValue } = virtual_document_1.VirtualDocument.findAttribute({
                 attributeKey: 'title',
-                sourceElement: firstElementChild
+                element: firstElementChild
             });
             const { innerHTML: innerHtml } = firstElementChild;
             expect(isFound).toBeTruthy();

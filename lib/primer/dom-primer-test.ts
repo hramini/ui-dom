@@ -16,7 +16,7 @@ describe('@DomPrimer', (): void => {
 
   describe('#setElement', (): void => {
     test('expects to set value to "element" property', (): void => {
-      const { element } = doc.makeElement({ tagName: domTagName });
+      const { element } = doc.createNewElement({ tagName: domTagName });
       domPrimer.setElement({ element });
       const {
         element: { tagName: elementTagName }
@@ -28,7 +28,7 @@ describe('@DomPrimer', (): void => {
 
   describe('#setTarget', (): void => {
     test('expects to set value to "target" property', (): void => {
-      const { element: target } = doc.findElementById({ identifier: rootId });
+      const { element: target } = doc.findElementById({ elementId: rootId });
       domPrimer.setTarget({ target });
       const {
         // eslint-disable-next-line id-length
@@ -41,9 +41,9 @@ describe('@DomPrimer', (): void => {
 
   describe('#start', (): void => {
     test('expects to append element value into target', (): void => {
-      const { element } = doc.makeElement({ tagName: domTagName });
-      VirtualDocument.setId({ identifier: 'dom_element', source: element });
-      const { element: target } = doc.findElementById({ identifier: rootId });
+      const { element } = doc.createNewElement({ tagName: domTagName });
+      VirtualDocument.setId({ element, identifier: 'dom_element' });
+      const { element: target } = doc.findElementById({ elementId: rootId });
       domPrimer.setElement({ element });
       domPrimer.setTarget({ target });
       domPrimer.start();
@@ -51,7 +51,7 @@ describe('@DomPrimer', (): void => {
       const {
         isFound,
         element: { tagName }
-      } = doc.findElementById({ identifier: 'dom_element' });
+      } = doc.findElementById({ elementId: 'dom_element' });
       const {
         isFound: isParentFound,
         // eslint-disable-next-line id-length

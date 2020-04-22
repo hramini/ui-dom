@@ -22,7 +22,7 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
     param: ITagElementOption<TDomElement, P>
   ): IElement<TDomElement> {
     const { name, properties, children } = param;
-    const { element } = this.virtualDocument.makeElement({ tagName: name });
+    const { element } = this.virtualDocument.createNewElement({ tagName: name });
     DomTagBuilder.appendProperties<P>({ element, properties });
     DomBuilder.appendChildrenToProperties({ children, properties });
     const { children: childrenProperty } = properties;
@@ -37,15 +37,15 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
 
     if (childrenLengthStatus) {
       VirtualDocument.setInnerHtml({
-        innerHtml: '',
-        source: element
+        element,
+        innerHtml: ''
       });
 
       const arrayChildren: (string | TDomElement)[] = children as (string | TDomElement)[];
       arrayChildren.forEach((child: string | TDomElement): void => {
         VirtualDocument.append({
-          element: child,
-          source: element
+          appendTo: element,
+          element: child
         });
       });
     }
@@ -68,7 +68,7 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
         VirtualDocument.setAttribute({
           attributeKey: key,
           attributeValue: value as string,
-          sourceElement: element
+          element
         });
       }
     });

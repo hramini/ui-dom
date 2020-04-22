@@ -87,18 +87,18 @@ export abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
   private updateElementInDocument(): void {
     const { isFound: isAttributeFound, attributeValue } = VirtualDocument.findAttribute({
       attributeKey: 'pre-unit-data',
-      sourceElement: this.providedView
+      element: this.providedView
     });
 
     if (isAttributeFound) {
-      const { isFound: isElementFound, foundElement } = this.doc.findFirstElementByQuery({
+      const { isFound: isElementFound, element } = this.doc.findFirstElementByQuery({
         query: `${this.providedView.tagName.toLowerCase()}[unit-data="${attributeValue}"]`
       });
 
       if (isElementFound) {
         VirtualDocument.replaceElements({
           replaceableElement: this.providedView,
-          sourceElement: foundElement
+          sourceElement: element
         });
       }
     }

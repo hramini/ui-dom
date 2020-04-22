@@ -28,7 +28,7 @@ describe('@DomFrameBuilder', (): void => {
       const {
         elementCollection: { length }
       } = VirtualDocument.findElementsByTagName({
-        source: element,
+        element,
         tagName: domUnitDemoElementTagName
       });
 
@@ -49,7 +49,7 @@ describe('@DomFrameBuilder', (): void => {
       });
       const { isFound, attributeValue } = VirtualDocument.findAttribute({
         attributeKey: 'title',
-        sourceElement: firstElementChild as HTMLElement
+        element: firstElementChild as HTMLElement
       });
 
       expect(isFound).toBeTruthy();
@@ -70,7 +70,7 @@ describe('@DomFrameBuilder', (): void => {
       });
       const { isFound, attributeValue } = VirtualDocument.findAttribute({
         attributeKey: 'title',
-        sourceElement: firstElementChild as HTMLElement
+        element: firstElementChild as HTMLElement
       });
 
       expect(isFound).toBeTruthy();
@@ -94,10 +94,10 @@ describe('@DomFrameBuilder', (): void => {
     });
 
     test(`expects an element without properties and with array children to its innerHTML be ${elementChild} + another element with ${innerElementTagName} tagName`, (): void => {
-      const { element: childElement } = doc.makeElement({ tagName: innerElementTagName });
+      const { element: childElement } = doc.createNewElement({ tagName: innerElementTagName });
       VirtualDocument.setInnerHtml({
-        innerHtml: innerElementInnerHtml,
-        source: childElement
+        element: childElement,
+        innerHtml: innerElementInnerHtml
       });
       const { element } = domFrameBuilder.buildElement<IDomUnitDemoProps, IDomUnitDemoStates>({
         UnitConstructor: DomUnitDemo,
@@ -124,7 +124,7 @@ describe('@DomFrameBuilder', (): void => {
       });
       const { isFound, attributeValue } = VirtualDocument.findAttribute({
         attributeKey: 'title',
-        sourceElement: firstElementChild as HTMLElement
+        element: firstElementChild as HTMLElement
       });
       const { innerHTML: innerHtml } = firstElementChild;
 

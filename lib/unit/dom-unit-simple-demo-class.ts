@@ -20,7 +20,7 @@ export class DomUnitSimpleDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoSt
   public provide(): IElement<TDomElement> {
     this.mountLifeCycleResult += 'P';
     this.updateLifeCycleResult += 'P';
-    const { element } = this.doc.makeElement({ tagName: 'dom-unit-demo' });
+    const { element } = this.doc.createNewElement({ tagName: 'dom-unit-demo' });
 
     return { element };
   }

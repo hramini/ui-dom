@@ -24,23 +24,23 @@ class DomFrameBuilder extends dom_builder_class_1.DomBuilder {
             DomUnitConstructor: UnitConstructor,
             properties
         });
-        const { element: unitElement } = this.doc.makeElement({
+        const { element: unitElement } = this.doc.createNewElement({
             tagName: `${UnitConstructor.name.toLowerCase()}-unit`
         });
         const { element } = unitInstance.getProvidedView();
         virtual_document_1.VirtualDocument.append({
-            element,
-            source: unitElement
+            appendTo: unitElement,
+            element
         });
         virtual_document_1.VirtualDocument.setAttribute({
             attributeKey: 'pre-unit-data',
             attributeValue: previousTag.toString(),
-            sourceElement: unitElement
+            element: unitElement
         });
         virtual_document_1.VirtualDocument.setAttribute({
             attributeKey: 'unit-data',
             attributeValue: updateTag.toString(),
-            sourceElement: unitElement
+            element: unitElement
         });
         return { element: unitElement };
     }

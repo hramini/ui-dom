@@ -36,7 +36,7 @@ describe('@DomTagBuilder', (): void => {
       });
       const { isFound, attributeValue } = VirtualDocument.findAttribute({
         attributeKey: 'name',
-        sourceElement: element
+        element
       });
 
       expect(isFound).toBeTruthy();
@@ -115,7 +115,7 @@ describe('@DomTagBuilder', (): void => {
       const { tagName: elementTagName, innerHTML: elementInnerHtml } = element;
       const { isFound, attributeValue: nameAttributeValue } = VirtualDocument.findAttribute({
         attributeKey: 'name',
-        sourceElement: element
+        element
       });
 
       expect(elementTagName.toLowerCase()).toBe(domTagName);
@@ -133,7 +133,7 @@ describe('@DomTagBuilder', (): void => {
       });
       const { isFound } = VirtualDocument.findAttribute({
         attributeKey: 'children',
-        sourceElement: element
+        element
       });
       const { innerHTML: elementInnerHtml } = element;
 

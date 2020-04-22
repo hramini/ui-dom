@@ -36,24 +36,24 @@ export class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomEle
       DomUnitConstructor: UnitConstructor,
       properties
     });
-    const { element: unitElement } = this.doc.makeElement({
+    const { element: unitElement } = this.doc.createNewElement({
       tagName: `${UnitConstructor.name.toLowerCase()}-unit`
     });
     const { element } = unitInstance.getProvidedView();
 
     VirtualDocument.append({
-      element,
-      source: unitElement
+      appendTo: unitElement,
+      element
     });
     VirtualDocument.setAttribute({
       attributeKey: 'pre-unit-data',
       attributeValue: previousTag.toString(),
-      sourceElement: unitElement
+      element: unitElement
     });
     VirtualDocument.setAttribute({
       attributeKey: 'unit-data',
       attributeValue: updateTag.toString(),
-      sourceElement: unitElement
+      element: unitElement
     });
 
     return { element: unitElement };

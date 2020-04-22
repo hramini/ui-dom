@@ -11,7 +11,7 @@ class DomTagBuilder extends dom_builder_class_1.DomBuilder {
     }
     buildElement(param) {
         const { name, properties, children } = param;
-        const { element } = this.virtualDocument.makeElement({ tagName: name });
+        const { element } = this.virtualDocument.createNewElement({ tagName: name });
         DomTagBuilder.appendProperties({ element, properties });
         dom_builder_class_1.DomBuilder.appendChildrenToProperties({ children, properties });
         const { children: childrenProperty } = properties;
@@ -23,14 +23,14 @@ class DomTagBuilder extends dom_builder_class_1.DomBuilder {
         const { status: childrenLengthStatus } = dom_builder_class_1.DomBuilder.checkChildren({ children });
         if (childrenLengthStatus) {
             virtual_document_1.VirtualDocument.setInnerHtml({
-                innerHtml: '',
-                source: element
+                element,
+                innerHtml: ''
             });
             const arrayChildren = children;
             arrayChildren.forEach((child) => {
                 virtual_document_1.VirtualDocument.append({
-                    element: child,
-                    source: element
+                    appendTo: element,
+                    element: child
                 });
             });
         }
@@ -48,7 +48,7 @@ class DomTagBuilder extends dom_builder_class_1.DomBuilder {
                 virtual_document_1.VirtualDocument.setAttribute({
                     attributeKey: key,
                     attributeValue: value,
-                    sourceElement: element
+                    element
                 });
             }
         });

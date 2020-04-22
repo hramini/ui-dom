@@ -63,14 +63,14 @@ describe('@DomUnit', () => {
             const virtualDocument = new virtual_document_1.VirtualDocument({ doc: document });
             const { attributeValue: beforeElementPreUnitData } = virtual_document_1.VirtualDocument.findAttribute({
                 attributeKey: 'pre-unit-data',
-                sourceElement: beforeElement
+                element: beforeElement
             });
             const { isFound: isElementInDocBeforeUpdateFound } = virtualDocument.findFirstElementByQuery({
                 query: `${beforeElementTagName.toLowerCase()}[unit-data="${beforeElementPreUnitData}"]`
             });
             const { attributeValue: afterElementPreUnitData } = virtual_document_1.VirtualDocument.findAttribute({
                 attributeKey: 'pre-unit-data',
-                sourceElement: beforeElement
+                element: beforeElement
             });
             const { isFound: isElementInDocAfterUpdateFound } = virtualDocument.findFirstElementByQuery({
                 query: `${afterElement.tagName.toLowerCase()}[unit-data="${afterElementPreUnitData}"]`
@@ -88,24 +88,24 @@ describe('@DomUnit', () => {
             const { elementCollection: { 0: bodyElement } } = virtualDocument.findElementsByTagNameInDoc({
                 tagName: 'body'
             });
-            virtual_document_1.VirtualDocument.append({ element: beforeElement, source: bodyElement });
+            virtual_document_1.VirtualDocument.append({ appendTo: bodyElement, element: beforeElement });
             domUnitFrameDemo.runUpdateLifeCycle({ properties: {} });
             const { element: afterElement } = domUnitFrameDemo.getProvidedView();
             const { attributeValue: beforeElementPreUnitData } = virtual_document_1.VirtualDocument.findAttribute({
                 attributeKey: 'pre-unit-data',
-                sourceElement: beforeElement
+                element: beforeElement
             });
             const { attributeValue: afterElementPreUnitData } = virtual_document_1.VirtualDocument.findAttribute({
                 attributeKey: 'pre-unit-data',
-                sourceElement: afterElement
+                element: afterElement
             });
             const { attributeValue: beforeElementUnitData } = virtual_document_1.VirtualDocument.findAttribute({
                 attributeKey: 'unit-data',
-                sourceElement: beforeElement
+                element: beforeElement
             });
             const { attributeValue: afterElementUnitData } = virtual_document_1.VirtualDocument.findAttribute({
                 attributeKey: 'unit-data',
-                sourceElement: afterElement
+                element: afterElement
             });
             expect(beforeElementPreUnitData).not.toEqual(afterElementPreUnitData);
             expect(beforeElementUnitData).not.toEqual(afterElementUnitData);

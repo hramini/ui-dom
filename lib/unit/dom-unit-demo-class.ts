@@ -50,11 +50,11 @@ export class DomUnitDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> 
     });
     this.mountLifeCycleResult += 'P';
     this.updateLifeCycleResult += 'P';
-    const { element } = this.doc.makeElement({ tagName: 'dom-unit-demo' });
+    const { element } = this.doc.createNewElement({ tagName: 'dom-unit-demo' });
     VirtualDocument.setAttribute({
       attributeKey: 'title',
       attributeValue: this.props.title ?? '',
-      sourceElement: element
+      element
     });
     const { children: childrenProperty } = this.props;
     // TODO: use validator class for checking these kinds of conditions

@@ -29,7 +29,7 @@ describe('@DomTagBuilder', () => {
             });
             const { isFound, attributeValue } = virtual_document_1.VirtualDocument.findAttribute({
                 attributeKey: 'name',
-                sourceElement: element
+                element
             });
             expect(isFound).toBeTruthy();
             expect(attributeValue).toBe(nameAttribute);
@@ -88,7 +88,7 @@ describe('@DomTagBuilder', () => {
             const { tagName: elementTagName, innerHTML: elementInnerHtml } = element;
             const { isFound, attributeValue: nameAttributeValue } = virtual_document_1.VirtualDocument.findAttribute({
                 attributeKey: 'name',
-                sourceElement: element
+                element
             });
             expect(elementTagName.toLowerCase()).toBe(domTagName);
             expect(elementInnerHtml).toBe(elementInnerHtmlText);
@@ -104,7 +104,7 @@ describe('@DomTagBuilder', () => {
             });
             const { isFound } = virtual_document_1.VirtualDocument.findAttribute({
                 attributeKey: 'children',
-                sourceElement: element
+                element
             });
             const { innerHTML: elementInnerHtml } = element;
             expect(isFound).toBeFalsy();
