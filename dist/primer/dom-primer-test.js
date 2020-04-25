@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const virtual_document_1 = require("virtual-document");
+const dom_unit_class_1 = require("../unit/dom-unit-class");
 const dom_primer_class_1 = require("./dom-primer-class");
 describe('@DomPrimer', () => {
     let doc;
@@ -13,6 +14,12 @@ describe('@DomPrimer', () => {
         docDemo = new virtual_document_1.VirtualDocumentDemo({ virtualDocument: doc });
         docDemo.createBase();
         domPrimer = new dom_primer_class_1.DomPrimer();
+    });
+    describe('#getUnitPrototype', () => {
+        test('expects the return value to be match with prototype of @DomUnit', () => {
+            const { unitPrototype } = domPrimer.getUnitPrototype();
+            expect(unitPrototype).toMatchObject(dom_unit_class_1.DomUnit.prototype);
+        });
     });
     describe('#setElement', () => {
         test('expects to set value to "element" property', () => {

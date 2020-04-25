@@ -1,4 +1,5 @@
 import { VirtualDocument, VirtualDocumentDemo } from 'virtual-document';
+import { DomUnit } from '../unit/dom-unit-class';
 import { DomPrimer } from './dom-primer-class';
 
 describe('@DomPrimer', (): void => {
@@ -12,6 +13,14 @@ describe('@DomPrimer', (): void => {
     docDemo = new VirtualDocumentDemo({ virtualDocument: doc });
     docDemo.createBase();
     domPrimer = new DomPrimer();
+  });
+
+  describe('#getUnitPrototype', (): void => {
+    test('expects the return value to be match with prototype of @DomUnit', (): void => {
+      const { unitPrototype } = domPrimer.getUnitPrototype();
+
+      expect(unitPrototype).toMatchObject(DomUnit.prototype);
+    });
   });
 
   describe('#setElement', (): void => {
