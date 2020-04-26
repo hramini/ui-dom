@@ -5,6 +5,7 @@ import { DomTagBuilder } from './dom-tag-builder-class';
 
 describe('@DomTagBuilder', (): void => {
   let domTagBuilder: DomTagBuilder;
+
   beforeAll((): void => {
     domTagBuilder = new DomTagBuilder();
   });
@@ -54,6 +55,7 @@ describe('@DomTagBuilder', (): void => {
           }
         }
       });
+
       element.click();
 
       expect(testText).toBe(afterText);

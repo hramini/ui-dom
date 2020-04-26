@@ -22,10 +22,12 @@ export class DomContainer {
     this.units = {};
   }
 
-  public getUnit(param: IDomContainerGetUnitIn): ITaggedUnit {
+  public extractUnit(param: IDomContainerGetUnitIn): ITaggedUnit {
     const { DomUnitConstructor, properties } = param;
+
     this.DomUnitConstructor = DomUnitConstructor;
     this.properties = properties;
+
     const { status } = this.checkUnitExistence();
 
     if (status) {
@@ -33,6 +35,7 @@ export class DomContainer {
     } else {
       this.setUnit();
     }
+
     const { unitKeyName } = this.getUnitKeyName();
     const { unit: registeredUnit, updateTag, previousTag } = this.units[unitKeyName];
 
@@ -47,9 +50,12 @@ export class DomContainer {
       IBasicProperties<TDomElement>,
       IBasicStates
     > = new DomUnitConstructor();
+
     domUnitInstance.runMountLifeCycle({ properties });
+
     const { updateTag } = DomContainer.getNewUpdateTag();
     const { unitKeyName } = this.getUnitKeyName();
+
     this.units[unitKeyName] = {
       previousTag: 0,
       unit: domUnitInstance,
@@ -60,6 +66,7 @@ export class DomContainer {
   private updateUnit(): void {
     const { properties } = this;
     const { unitInstance } = this.updateUnitTag();
+
     unitInstance.runUpdateLifeCycle({ properties });
   }
 
@@ -74,20 +81,20 @@ export class DomContainer {
     const { unitKeyName } = this.getUnitKeyName();
     const { [unitKeyName]: taggedUnit } = this.units;
     const { unit: unitInstance } = taggedUnit;
+
     taggedUnit.previousTag = taggedUnit.updateTag;
+
     const { updateTag } = DomContainer.getNewUpdateTag();
+
     taggedUnit.updateTag = updateTag;
 
     return { unitInstance };
   }
 
   private getUnitKeyName(): IDomContainerGetUnitKeyNameOut {
-    const {
-      properties: { key }
-    } = this;
-    const {
-      DomUnitConstructor: { name }
-    } = this;
+    const { properties, DomUnitConstructor } = this;
+    const { key } = properties;
+    const { name } = DomUnitConstructor;
     const unitKeyName: string = `${name}-${key ?? ''}`;
 
     return { unitKeyName };

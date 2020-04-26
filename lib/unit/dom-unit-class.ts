@@ -30,19 +30,25 @@ export abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
   }
 
   public onBeforeProvide(): void {}
+
   public onAfterProvide(): void {}
+
   public onBeforeUpdate(): IUnitOnBeforeUpdateCheck {
     return { shouldUpdate: true };
   }
 
   public onAfterUpdate(): void {}
+
   public onBeforeDispose(): void {}
 
   public runMountLifeCycle(param: IDomUnitRunMountLifeCycleIn<P>): void {
     const { properties } = param;
+
     this.setProps({ properties });
     this.onBeforeProvide();
+
     const { element } = this.provide();
+
     this.providedView = element;
     this.onAfterProvide();
   }
@@ -53,7 +59,9 @@ export abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
 
     if (shouldUpdate) {
       this.setProps({ properties });
+
       const { element } = this.provide();
+
       this.providedView = element;
       this.updateElementInDocument();
       this.onAfterUpdate();
@@ -65,39 +73,49 @@ export abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
   }
 
   public getProvidedView(): IElement<TDomElement> {
-    return { element: this.providedView };
+    const { providedView } = this;
+
+    return { element: providedView };
   }
 
   public forceUpdate(): void {
-    this.runUpdateLifeCycle({ properties: this.props });
+    const { props } = this;
+
+    this.runUpdateLifeCycle({ properties: props });
   }
 
   public alterState<K extends keyof S>(param: IUnitAlterStateOptions<S, K>): void {
-    const { state, callbackFunction } = param;
-    this.state = { ...this.state, ...state };
-    this.runUpdateLifeCycle({ properties: this.props });
+    const { props, state } = this;
+    const { state: paramState, callbackFunction } = param;
+
+    this.state = { ...state, ...paramState };
+
+    this.runUpdateLifeCycle({ properties: props });
     callbackFunction?.();
   }
 
   private setProps(param: IDomUnitSetPropsIn<P>): void {
     const { properties } = param;
+
     this.props = properties;
   }
 
   private updateElementInDocument(): void {
+    const { providedView, doc } = this;
     const { isFound: isAttributeFound, attributeValue } = VirtualDocument.findAttribute({
       attributeKey: 'pre-unit-data',
-      element: this.providedView
+      element: providedView
     });
 
     if (isAttributeFound) {
-      const { isFound: isElementFound, element } = this.doc.findFirstElementByQuery({
-        query: `${this.providedView.tagName.toLowerCase()}[unit-data="${attributeValue}"]`
+      const { tagName } = providedView;
+      const { isFound: isElementFound, element } = doc.findFirstElementByQuery({
+        query: `${tagName.toLowerCase()}[unit-data="${attributeValue}"]`
       });
 
       if (isElementFound) {
         VirtualDocument.replaceElements({
-          replaceableElement: this.providedView,
+          replaceableElement: providedView,
           sourceElement: element
         });
       }

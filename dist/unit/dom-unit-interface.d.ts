@@ -1,9 +1,9 @@
 export interface IDomUnitRunMountLifeCycleIn<P> {
-    properties: P;
+    readonly properties: P;
 }
 export interface IDomUnitRunUpdateLifeCycleIn<P> {
-    properties: P;
+    readonly properties: P;
 }
 export interface IDomUnitSetPropsIn<P> {
-    properties: P;
+    readonly properties: P;
 }

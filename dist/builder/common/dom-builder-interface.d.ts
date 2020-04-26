@@ -1,24 +1,18 @@
 import { TDomElement } from '../../type/element-type';
-export interface IDomBuilderCheckPropertyValueTypeOut {
-    status: boolean;
-}
 export interface IDomBuilderCheckChildrenIn {
-    children?: (string | TDomElement)[];
+    readonly children?: (string | TDomElement)[];
 }
 export interface IDomBuilderCheckChildrenOut {
-    status: boolean;
+    readonly status: boolean;
 }
 export interface IDomBuilderAppendChildrenToPropertiesIn<P> {
-    properties: P;
-    children?: (string | TDomElement)[];
-}
-export interface IDomFrameBuilderCheckChildrenLengthIn {
-    children?: (string | TDomElement)[];
+    readonly properties: P;
+    readonly children?: (string | TDomElement)[];
 }
 export interface IDomBuilderCheckTypeOfIn<T> {
-    value: T;
-    type: 'bigint' | 'boolean' | 'function' | 'number' | 'object' | 'string' | 'symbol' | 'undefined';
+    readonly value: T;
+    readonly type: 'bigint' | 'boolean' | 'function' | 'number' | 'object' | 'string' | 'symbol' | 'undefined';
 }
 export interface IDomBuilderCheckTypeOfOut {
-    status: boolean;
+    readonly status: boolean;
 }

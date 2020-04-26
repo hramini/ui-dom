@@ -19,11 +19,13 @@ export class DomPrimer implements IPrimer<TDomElement> {
 
   public setElement(param: IPrimerElement<TDomElement>): void {
     const { element } = param;
+
     this.element = element;
   }
 
   public setTarget(param: IPrimerTarget): void {
     const { target } = param;
+
     this.target = target;
   }
 

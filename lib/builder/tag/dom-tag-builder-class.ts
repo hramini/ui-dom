@@ -13,6 +13,7 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
 
   public constructor() {
     super();
+
     this.virtualDocument = new VirtualDocument({
       doc: document
     });
@@ -23,9 +24,12 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
   ): IElement<TDomElement> {
     const { name, properties, children } = param;
     const { element } = this.virtualDocument.createNewElement({ tagName: name });
+
     DomTagBuilder.appendProperties<P>({ element, properties });
     DomBuilder.appendChildrenToProperties({ children, properties });
+
     const { children: childrenProperty } = properties;
+
     DomTagBuilder.appendChildren({ children: childrenProperty, element });
 
     return { element };
@@ -42,6 +46,8 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
       });
 
       const arrayChildren: (string | TDomElement)[] = children as (string | TDomElement)[];
+
+      // TODO: should be replaced with iterator class
       arrayChildren.forEach((child: string | TDomElement): void => {
         VirtualDocument.append({
           appendTo: element,
@@ -63,6 +69,7 @@ export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement
       // TODO: the else if condition should be change when validator class is ready
       if (status) {
         const functionKey: string = key.replace('on', '');
+
         element.addEventListener(functionKey.toLowerCase(), value as EventListener);
       } else if (key !== 'children') {
         VirtualDocument.setAttribute({

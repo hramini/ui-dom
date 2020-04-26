@@ -10,6 +10,7 @@ export class DomUnitFrameDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoSta
 
   public constructor() {
     super();
+
     this.builder = new DomFrameBuilder();
   }
 

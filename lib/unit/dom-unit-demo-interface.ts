@@ -2,13 +2,21 @@ import { IBasicProperties, IBasicStates } from 'ui-wrapper';
 import { TDomElement } from '../type/element-type';
 
 export interface IDomUnitDemoProps extends IBasicProperties<TDomElement> {
-  title?: string;
+  readonly title?: string;
+}
+
+export interface IDomUnitDemoSetOnBeforeUpdateReturnIn {
+  readonly value: boolean;
 }
 
 export interface IDomUnitDemoStates extends IBasicStates {
-  testState: string;
+  readonly testState: string;
 }
 
 export interface IDomUnitDemoGetStateOut<S> {
-  state: S;
+  readonly state: S;
+}
+
+export interface IDomUnitLifeCycleResultOut {
+  readonly lifeCycleResult: string;
 }

@@ -5,7 +5,7 @@ export declare class DomContainer {
     private DomUnitConstructor;
     private properties;
     private constructor();
-    getUnit(param: IDomContainerGetUnitIn): ITaggedUnit;
+    extractUnit(param: IDomContainerGetUnitIn): ITaggedUnit;
     private setUnit;
     private updateUnit;
     private checkUnitExistence;

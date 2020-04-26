@@ -4,11 +4,35 @@ import { IBasicProperties, IElement, IFrameBuilder, IFrameElementOption, IPrimer
 import { VirtualDocument } from 'virtual-document';
 
 export declare type TDomElement = HTMLElement;
+export interface IDomBuilderCheckChildrenIn {
+	readonly children?: (string | TDomElement)[];
+}
+export interface IDomBuilderCheckChildrenOut {
+	readonly status: boolean;
+}
+export interface IDomBuilderAppendChildrenToPropertiesIn<P> {
+	readonly properties: P;
+	readonly children?: (string | TDomElement)[];
+}
+export interface IDomBuilderCheckTypeOfIn<T> {
+	readonly value: T;
+	readonly type: 'bigint' | 'boolean' | 'function' | 'number' | 'object' | 'string' | 'symbol' | 'undefined';
+}
+export interface IDomBuilderCheckTypeOfOut {
+	readonly status: boolean;
+}
+declare abstract class DomBuilder {
+	protected virtualDom: VirtualDocument;
+	protected constructor();
+	protected static checkTypeOf<T>(param: IDomBuilderCheckTypeOfIn<T>): IDomBuilderCheckTypeOfOut;
+	protected static checkChildren(param: IDomBuilderCheckChildrenIn): IDomBuilderCheckChildrenOut;
+	protected static appendChildrenToProperties<P extends IBasicProperties<TDomElement>>(param: IDomBuilderAppendChildrenToPropertiesIn<P>): void;
+}
 export interface IDomUnitRunMountLifeCycleIn<P> {
-	properties: P;
+	readonly properties: P;
 }
 export interface IDomUnitRunUpdateLifeCycleIn<P> {
-	properties: P;
+	readonly properties: P;
 }
 declare abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
 	props: Readonly<P> & Readonly<IBasicProperties<TDomElement>>;
@@ -31,32 +55,8 @@ declare abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
 	private setProps;
 	private updateElementInDocument;
 }
-export interface IDomBuilderCheckChildrenIn {
-	children?: (string | TDomElement)[];
-}
-export interface IDomBuilderCheckChildrenOut {
-	status: boolean;
-}
-export interface IDomBuilderAppendChildrenToPropertiesIn<P> {
-	properties: P;
-	children?: (string | TDomElement)[];
-}
-export interface IDomBuilderCheckTypeOfIn<T> {
-	value: T;
-	type: 'bigint' | 'boolean' | 'function' | 'number' | 'object' | 'string' | 'symbol' | 'undefined';
-}
-export interface IDomBuilderCheckTypeOfOut {
-	status: boolean;
-}
-declare abstract class DomBuilder {
-	protected virtualDom: VirtualDocument;
-	protected constructor();
-	protected static checkTypeOf<T>(param: IDomBuilderCheckTypeOfIn<T>): IDomBuilderCheckTypeOfOut;
-	protected static checkChildren(param: IDomBuilderCheckChildrenIn): IDomBuilderCheckChildrenOut;
-	protected static appendChildrenToProperties<P extends IBasicProperties<TDomElement>>(param: IDomBuilderAppendChildrenToPropertiesIn<P>): void;
-}
 export interface IDomFrameElementOption<P, S> extends IFrameElementOption<TDomElement, P, S> {
-	UnitConstructor: new () => DomUnit<P, S>;
+	readonly UnitConstructor: new () => DomUnit<P, S>;
 }
 export declare class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomElement> {
 	private readonly doc;

@@ -5,7 +5,6 @@ import { TDomElement } from '../../type/element-type';
 import { DomBuilder } from '../common/dom-builder-class';
 import {
   IDomFrameBuilderAppendKeyPropertiesIn,
-  IDomFrameBuilderAppendKeyPropertiesOut,
   IDomFrameElementOption
 } from './dom-frame-builder-interface';
 
@@ -21,18 +20,19 @@ export class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomEle
     param: IDomFrameElementOption<P, S>
   ): IElement<TDomElement> {
     const { UnitConstructor, children } = param;
-    let { properties } = param;
+    const { properties } = param;
+
     DomBuilder.appendChildrenToProperties<P>({
       children,
       properties
     });
-    const { properties: appendedKeyProperties } = DomFrameBuilder.appendKeyProperties<P>({
+
+    DomFrameBuilder.appendKeyProperties<P>({
       properties
     });
-    // TODO: removing this line and testing the side effects
-    properties = { ...appendedKeyProperties };
+
     const { domContainer } = DomContainer.getInstance();
-    const { unit: unitInstance, previousTag, updateTag } = domContainer.getUnit({
+    const { unit: unitInstance, previousTag, updateTag } = domContainer.extractUnit({
       DomUnitConstructor: UnitConstructor,
       properties
     });
@@ -61,7 +61,7 @@ export class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomEle
 
   private static appendKeyProperties<P extends IBasicProperties<TDomElement>>(
     param: IDomFrameBuilderAppendKeyPropertiesIn<P>
-  ): IDomFrameBuilderAppendKeyPropertiesOut<P> {
+  ): void {
     const { properties } = param;
     const randomRangeNumber: number = 1000;
 
@@ -70,7 +70,5 @@ export class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomEle
       // TODO: using Math class for this line
       properties.key = Math.floor(Math.random() * randomRangeNumber);
     }
-
-    return { properties };
   }
 }

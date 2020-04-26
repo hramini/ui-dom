@@ -5,6 +5,9 @@ const dom_unit_class_1 = require("./dom-unit-class");
 class DomUnitDemo extends dom_unit_class_1.DomUnit {
     constructor() {
         super();
+        this.doc = new virtual_document_1.VirtualDocument({
+            doc: document
+        });
         this.mountLifeCycleResult = 'C';
         this.updateLifeCycleResult = '';
         this.disposeLifeCycleResult = '';
@@ -17,8 +20,9 @@ class DomUnitDemo extends dom_unit_class_1.DomUnit {
         this.mountLifeCycleResult += 'Ap';
     }
     onBeforeUpdate() {
+        const { onBeforeUpdateReturn } = this;
         this.updateLifeCycleResult = 'Bu';
-        return { shouldUpdate: this.onBeforeUpdateReturn };
+        return { shouldUpdate: onBeforeUpdateReturn };
     }
     onAfterUpdate() {
         this.updateLifeCycleResult += 'Au';
@@ -27,19 +31,16 @@ class DomUnitDemo extends dom_unit_class_1.DomUnit {
         this.disposeLifeCycleResult += 'Bd';
     }
     provide() {
-        var _a;
-        this.doc = new virtual_document_1.VirtualDocument({
-            doc: document
-        });
+        const { doc, props } = this;
         this.mountLifeCycleResult += 'P';
         this.updateLifeCycleResult += 'P';
-        const { element } = this.doc.createNewElement({ tagName: 'dom-unit-demo' });
+        const { element } = doc.createNewElement({ tagName: 'dom-unit-demo' });
+        const { title, children: childrenProperty } = props;
         virtual_document_1.VirtualDocument.setAttribute({
             attributeKey: 'title',
-            attributeValue: (_a = this.props.title, (_a !== null && _a !== void 0 ? _a : '')),
+            attributeValue: (title !== null && title !== void 0 ? title : ''),
             element
         });
-        const { children: childrenProperty } = this.props;
         const children = (childrenProperty !== null && childrenProperty !== void 0 ? childrenProperty : []);
         children.map((child) => {
             element.append(child);
@@ -48,19 +49,24 @@ class DomUnitDemo extends dom_unit_class_1.DomUnit {
         return { element };
     }
     getMountLifeCycleResult() {
-        return this.mountLifeCycleResult;
+        const { mountLifeCycleResult } = this;
+        return { lifeCycleResult: mountLifeCycleResult };
     }
     getUpdateLifeCycleResult() {
-        return this.updateLifeCycleResult;
+        const { updateLifeCycleResult } = this;
+        return { lifeCycleResult: updateLifeCycleResult };
     }
     getDisposeLifeCycleResult() {
-        return this.disposeLifeCycleResult;
+        const { disposeLifeCycleResult } = this;
+        return { lifeCycleResult: disposeLifeCycleResult };
     }
-    changeOnBeforeUpdateReturn(value) {
+    setOnBeforeUpdateReturn(param) {
+        const { value } = param;
         this.onBeforeUpdateReturn = value;
     }
     getState() {
-        return { state: this.state };
+        const { state } = this;
+        return { state };
     }
 }
 exports.DomUnitDemo = DomUnitDemo;

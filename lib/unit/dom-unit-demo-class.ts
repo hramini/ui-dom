@@ -5,7 +5,9 @@ import { DomUnit } from './dom-unit-class';
 import {
   IDomUnitDemoGetStateOut,
   IDomUnitDemoProps,
-  IDomUnitDemoStates
+  IDomUnitDemoSetOnBeforeUpdateReturnIn,
+  IDomUnitDemoStates,
+  IDomUnitLifeCycleResultOut
 } from './dom-unit-demo-interface';
 
 export class DomUnitDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> {
@@ -16,6 +18,10 @@ export class DomUnitDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> 
 
   public constructor() {
     super();
+
+    this.doc = new VirtualDocument({
+      doc: document
+    });
     this.mountLifeCycleResult = 'C';
     this.updateLifeCycleResult = '';
     this.disposeLifeCycleResult = '';
@@ -31,9 +37,10 @@ export class DomUnitDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> 
   }
 
   public onBeforeUpdate(): IUnitOnBeforeUpdateCheck {
+    const { onBeforeUpdateReturn } = this;
     this.updateLifeCycleResult = 'Bu';
 
-    return { shouldUpdate: this.onBeforeUpdateReturn };
+    return { shouldUpdate: onBeforeUpdateReturn };
   }
 
   public onAfterUpdate(): void {
@@ -45,20 +52,23 @@ export class DomUnitDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> 
   }
 
   public provide(): IElement<TDomElement> {
-    this.doc = new VirtualDocument({
-      doc: document
-    });
+    const { doc, props } = this;
+
     this.mountLifeCycleResult += 'P';
     this.updateLifeCycleResult += 'P';
-    const { element } = this.doc.createNewElement({ tagName: 'dom-unit-demo' });
+
+    const { element } = doc.createNewElement({ tagName: 'dom-unit-demo' });
+    const { title, children: childrenProperty } = props;
+
     VirtualDocument.setAttribute({
       attributeKey: 'title',
-      attributeValue: this.props.title ?? '',
+      attributeValue: title ?? '',
       element
     });
-    const { children: childrenProperty } = this.props;
+
     // TODO: use validator class for checking these kinds of conditions
     const children: (string | TDomElement)[] = childrenProperty ?? [];
+
     children.map((child: string | TDomElement): string | TDomElement => {
       element.append(child);
 
@@ -68,23 +78,33 @@ export class DomUnitDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> 
     return { element };
   }
 
-  public getMountLifeCycleResult(): string {
-    return this.mountLifeCycleResult;
+  public getMountLifeCycleResult(): IDomUnitLifeCycleResultOut {
+    const { mountLifeCycleResult } = this;
+
+    return { lifeCycleResult: mountLifeCycleResult };
   }
 
-  public getUpdateLifeCycleResult(): string {
-    return this.updateLifeCycleResult;
+  public getUpdateLifeCycleResult(): IDomUnitLifeCycleResultOut {
+    const { updateLifeCycleResult } = this;
+
+    return { lifeCycleResult: updateLifeCycleResult };
   }
 
-  public getDisposeLifeCycleResult(): string {
-    return this.disposeLifeCycleResult;
+  public getDisposeLifeCycleResult(): IDomUnitLifeCycleResultOut {
+    const { disposeLifeCycleResult } = this;
+
+    return { lifeCycleResult: disposeLifeCycleResult };
   }
 
-  public changeOnBeforeUpdateReturn(value: boolean): void {
+  public setOnBeforeUpdateReturn(param: IDomUnitDemoSetOnBeforeUpdateReturnIn): void {
+    const { value } = param;
+
     this.onBeforeUpdateReturn = value;
   }
 
   public getState(): IDomUnitDemoGetStateOut<IDomUnitDemoStates> {
-    return { state: this.state };
+    const { state } = this;
+
+    return { state };
   }
 }

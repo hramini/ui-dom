@@ -37,16 +37,19 @@ class DomUnit {
         this.onBeforeDispose();
     }
     getProvidedView() {
-        return { element: this.providedView };
+        const { providedView } = this;
+        return { element: providedView };
     }
     forceUpdate() {
-        this.runUpdateLifeCycle({ properties: this.props });
+        const { props } = this;
+        this.runUpdateLifeCycle({ properties: props });
     }
     alterState(param) {
         var _a;
-        const { state, callbackFunction } = param;
-        this.state = Object.assign(Object.assign({}, this.state), state);
-        this.runUpdateLifeCycle({ properties: this.props });
+        const { props, state } = this;
+        const { state: paramState, callbackFunction } = param;
+        this.state = Object.assign(Object.assign({}, state), paramState);
+        this.runUpdateLifeCycle({ properties: props });
         (_a = callbackFunction) === null || _a === void 0 ? void 0 : _a();
     }
     setProps(param) {
@@ -54,17 +57,19 @@ class DomUnit {
         this.props = properties;
     }
     updateElementInDocument() {
+        const { providedView, doc } = this;
         const { isFound: isAttributeFound, attributeValue } = virtual_document_1.VirtualDocument.findAttribute({
             attributeKey: 'pre-unit-data',
-            element: this.providedView
+            element: providedView
         });
         if (isAttributeFound) {
-            const { isFound: isElementFound, element } = this.doc.findFirstElementByQuery({
-                query: `${this.providedView.tagName.toLowerCase()}[unit-data="${attributeValue}"]`
+            const { tagName } = providedView;
+            const { isFound: isElementFound, element } = doc.findFirstElementByQuery({
+                query: `${tagName.toLowerCase()}[unit-data="${attributeValue}"]`
             });
             if (isElementFound) {
                 virtual_document_1.VirtualDocument.replaceElements({
-                    replaceableElement: this.providedView,
+                    replaceableElement: providedView,
                     sourceElement: element
                 });
             }

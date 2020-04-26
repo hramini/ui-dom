@@ -14,32 +14,34 @@ describe('@DomContainer', () => {
             expect(domContainerInstance).toBeInstanceOf(dom_container_class_1.DomContainer);
         });
     });
-    describe('#getUnit', () => {
+    describe('#extractUnit', () => {
         const mountLifeCycleText = 'CBpPAp';
         const updateLifeCycleText = 'BuPAu';
         test(`expects mountLifeCycleText to be ${mountLifeCycleText} after getting unit for the first time`, () => {
-            const { unit } = domContainer.getUnit({
+            const { unit } = domContainer.extractUnit({
                 DomUnitConstructor: dom_unit_demo_class_1.DomUnitDemo,
                 properties: { key: 1 }
             });
             const domUnit = unit;
-            expect(domUnit.getMountLifeCycleResult()).toBe(mountLifeCycleText);
+            const { lifeCycleResult } = domUnit.getMountLifeCycleResult();
+            expect(lifeCycleResult).toBe(mountLifeCycleText);
         });
         test(`expects updateLifeCycleText to be ${updateLifeCycleText} after getting unit for the second and more time`, () => {
-            domContainer.getUnit({ DomUnitConstructor: dom_unit_demo_class_1.DomUnitDemo, properties: {} });
-            const { unit: updatedUnit } = domContainer.getUnit({
+            domContainer.extractUnit({ DomUnitConstructor: dom_unit_demo_class_1.DomUnitDemo, properties: {} });
+            const { unit: updatedUnit } = domContainer.extractUnit({
                 DomUnitConstructor: dom_unit_demo_class_1.DomUnitDemo,
                 properties: {}
             });
             const domUnit = updatedUnit;
-            expect(domUnit.getUpdateLifeCycleResult()).toBe(updateLifeCycleText);
+            const { lifeCycleResult } = domUnit.getUpdateLifeCycleResult();
+            expect(lifeCycleResult).toBe(updateLifeCycleText);
         });
         test('expects updateTags to be different each times this method is called for the same unit', () => {
-            const { updateTag } = domContainer.getUnit({
+            const { updateTag } = domContainer.extractUnit({
                 DomUnitConstructor: dom_unit_demo_class_1.DomUnitDemo,
                 properties: {}
             });
-            const { updateTag: updatedUnitUpdateTag } = domContainer.getUnit({
+            const { updateTag: updatedUnitUpdateTag } = domContainer.extractUnit({
                 DomUnitConstructor: dom_unit_demo_class_1.DomUnitDemo,
                 properties: {}
             });

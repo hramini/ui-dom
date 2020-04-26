@@ -4,7 +4,7 @@ class DomContainer {
     constructor() {
         this.units = {};
     }
-    getUnit(param) {
+    extractUnit(param) {
         const { DomUnitConstructor, properties } = param;
         this.DomUnitConstructor = DomUnitConstructor;
         this.properties = properties;
@@ -52,8 +52,9 @@ class DomContainer {
         return { unitInstance };
     }
     getUnitKeyName() {
-        const { properties: { key } } = this;
-        const { DomUnitConstructor: { name } } = this;
+        const { properties, DomUnitConstructor } = this;
+        const { key } = properties;
+        const { name } = DomUnitConstructor;
         const unitKeyName = `${name}-${(key !== null && key !== void 0 ? key : '')}`;
         return { unitKeyName };
     }

@@ -1,13 +1,13 @@
 import { TDomElement } from '../../type/element-type';
 
 export interface IDomTagBuilderAppendPropertiesIn<P> {
-  element: TDomElement;
-  properties: P;
+  readonly element: TDomElement;
+  readonly properties: P;
 }
 
 export interface IDomTagBuilderAppendChildrenIn {
-  element: TDomElement;
-  children?: (string | TDomElement)[];
+  readonly element: TDomElement;
+  readonly children?: (string | TDomElement)[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias

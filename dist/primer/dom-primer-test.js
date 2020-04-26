@@ -12,8 +12,8 @@ describe('@DomPrimer', () => {
     beforeEach(() => {
         doc = new virtual_document_1.VirtualDocument();
         docDemo = new virtual_document_1.VirtualDocumentDemo({ virtualDocument: doc });
-        docDemo.createBase();
         domPrimer = new dom_primer_class_1.DomPrimer();
+        docDemo.createBase();
     });
     describe('#getUnitPrototype', () => {
         test('expects the return value to be match with prototype of @DomUnit', () => {
@@ -23,17 +23,19 @@ describe('@DomPrimer', () => {
     });
     describe('#setElement', () => {
         test('expects to set value to "element" property', () => {
-            const { element } = doc.createNewElement({ tagName: domTagName });
-            domPrimer.setElement({ element });
-            const { element: { tagName: elementTagName } } = domPrimer;
-            expect(elementTagName).toBe(domTagName);
+            const { element: createdElement } = doc.createNewElement({ tagName: domTagName });
+            domPrimer.setElement({ element: createdElement });
+            const { element } = domPrimer;
+            const { tagName } = element;
+            expect(tagName).toBe(domTagName);
         });
     });
     describe('#setTarget', () => {
         test('expects to set value to "target" property', () => {
-            const { element: target } = doc.findElementById({ elementId: rootId });
-            domPrimer.setTarget({ target });
-            const { target: { id: targetId } } = domPrimer;
+            const { element: rootElement } = doc.findElementById({ elementId: rootId });
+            domPrimer.setTarget({ target: rootElement });
+            const { target } = domPrimer;
+            const { id: targetId } = target;
             expect(targetId).toBe(rootId);
         });
     });

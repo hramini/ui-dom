@@ -11,19 +11,23 @@ class DomUnitSimpleDemo extends dom_unit_class_1.DomUnit {
         this.disposeLifeCycleResult = '';
     }
     provide() {
+        const { doc } = this;
         this.mountLifeCycleResult += 'P';
         this.updateLifeCycleResult += 'P';
-        const { element } = this.doc.createNewElement({ tagName: 'dom-unit-demo' });
+        const { element } = doc.createNewElement({ tagName: 'dom-unit-demo' });
         return { element };
     }
     getMountLifeCycleResult() {
-        return this.mountLifeCycleResult;
+        const { mountLifeCycleResult } = this;
+        return { lifeCycleResult: mountLifeCycleResult };
     }
     getUpdateLifeCycleResult() {
-        return this.updateLifeCycleResult;
+        const { updateLifeCycleResult } = this;
+        return { lifeCycleResult: updateLifeCycleResult };
     }
     getDisposeLifeCycleResult() {
-        return this.disposeLifeCycleResult;
+        const { disposeLifeCycleResult } = this;
+        return { lifeCycleResult: disposeLifeCycleResult };
     }
 }
 exports.DomUnitSimpleDemo = DomUnitSimpleDemo;

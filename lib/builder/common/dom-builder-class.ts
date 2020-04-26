@@ -7,7 +7,7 @@ import {
   IDomBuilderCheckChildrenOut,
   IDomBuilderCheckTypeOfIn,
   IDomBuilderCheckTypeOfOut
-} from '../dom-builder-interface';
+} from './dom-builder-interface';
 
 export abstract class DomBuilder {
   protected virtualDom: VirtualDocument;
@@ -16,6 +16,7 @@ export abstract class DomBuilder {
     this.virtualDom = new VirtualDocument();
   }
 
+  // TODO: this method will be removed after validator class being ready to uses
   protected static checkTypeOf<T>(param: IDomBuilderCheckTypeOfIn<T>): IDomBuilderCheckTypeOfOut {
     const { value, type } = param;
 

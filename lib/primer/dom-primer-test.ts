@@ -8,11 +8,13 @@ describe('@DomPrimer', (): void => {
   let domPrimer: DomPrimer;
   const domTagName: string = 'dom-tag';
   const rootId: string = 'root';
+
   beforeEach((): void => {
     doc = new VirtualDocument();
     docDemo = new VirtualDocumentDemo({ virtualDocument: doc });
-    docDemo.createBase();
     domPrimer = new DomPrimer();
+
+    docDemo.createBase();
   });
 
   describe('#getUnitPrototype', (): void => {
@@ -25,24 +27,26 @@ describe('@DomPrimer', (): void => {
 
   describe('#setElement', (): void => {
     test('expects to set value to "element" property', (): void => {
-      const { element } = doc.createNewElement({ tagName: domTagName });
-      domPrimer.setElement({ element });
-      const {
-        element: { tagName: elementTagName }
-      } = domPrimer;
+      const { element: createdElement } = doc.createNewElement({ tagName: domTagName });
 
-      expect(elementTagName).toBe(domTagName);
+      domPrimer.setElement({ element: createdElement });
+
+      const { element } = domPrimer;
+      const { tagName } = element;
+
+      expect(tagName).toBe(domTagName);
     });
   });
 
   describe('#setTarget', (): void => {
     test('expects to set value to "target" property', (): void => {
-      const { element: target } = doc.findElementById({ elementId: rootId });
-      domPrimer.setTarget({ target });
-      const {
-        // eslint-disable-next-line id-length
-        target: { id: targetId }
-      } = domPrimer;
+      const { element: rootElement } = doc.findElementById({ elementId: rootId });
+
+      domPrimer.setTarget({ target: rootElement });
+
+      const { target } = domPrimer;
+      // eslint-disable-next-line id-length
+      const { id: targetId } = target;
 
       expect(targetId).toBe(rootId);
     });
@@ -51,8 +55,11 @@ describe('@DomPrimer', (): void => {
   describe('#start', (): void => {
     test('expects to append element value into target', (): void => {
       const { element } = doc.createNewElement({ tagName: domTagName });
+
       VirtualDocument.setId({ element, identifier: 'dom_element' });
+
       const { element: target } = doc.findElementById({ elementId: rootId });
+
       domPrimer.setElement({ element });
       domPrimer.setTarget({ target });
       domPrimer.start();
@@ -69,7 +76,6 @@ describe('@DomPrimer', (): void => {
 
       expect(isFound).toBeTruthy();
       expect(tagName).toBe('dom-tag');
-
       expect(isParentFound).toBeTruthy();
       expect(parentElementId).toBe('root');
     });

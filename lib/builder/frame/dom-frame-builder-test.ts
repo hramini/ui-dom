@@ -6,6 +6,7 @@ import { DomFrameBuilder } from './dom-frame-builder-class';
 describe('@DomFrameBuilder', (): void => {
   let doc: VirtualDocument;
   let domFrameBuilder: DomFrameBuilder;
+
   beforeAll((): void => {
     doc = new VirtualDocument();
     domFrameBuilder = new DomFrameBuilder();

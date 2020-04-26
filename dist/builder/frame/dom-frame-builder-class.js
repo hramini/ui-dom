@@ -10,17 +10,16 @@ class DomFrameBuilder extends dom_builder_class_1.DomBuilder {
     }
     buildElement(param) {
         const { UnitConstructor, children } = param;
-        let { properties } = param;
+        const { properties } = param;
         dom_builder_class_1.DomBuilder.appendChildrenToProperties({
             children,
             properties
         });
-        const { properties: appendedKeyProperties } = DomFrameBuilder.appendKeyProperties({
+        DomFrameBuilder.appendKeyProperties({
             properties
         });
-        properties = Object.assign({}, appendedKeyProperties);
         const { domContainer } = dom_container_class_1.DomContainer.getInstance();
-        const { unit: unitInstance, previousTag, updateTag } = domContainer.getUnit({
+        const { unit: unitInstance, previousTag, updateTag } = domContainer.extractUnit({
             DomUnitConstructor: UnitConstructor,
             properties
         });
@@ -50,7 +49,6 @@ class DomFrameBuilder extends dom_builder_class_1.DomBuilder {
         if (typeof properties.key === 'undefined') {
             properties.key = Math.floor(Math.random() * randomRangeNumber);
         }
-        return { properties };
     }
 }
 exports.DomFrameBuilder = DomFrameBuilder;

@@ -1,7 +1,7 @@
 import { IElement, IUnitOnBeforeUpdateCheck } from 'ui-wrapper';
 import { TDomElement } from '../type/element-type';
 import { DomUnit } from './dom-unit-class';
-import { IDomUnitDemoGetStateOut, IDomUnitDemoProps, IDomUnitDemoStates } from './dom-unit-demo-interface';
+import { IDomUnitDemoGetStateOut, IDomUnitDemoProps, IDomUnitDemoSetOnBeforeUpdateReturnIn, IDomUnitDemoStates, IDomUnitLifeCycleResultOut } from './dom-unit-demo-interface';
 export declare class DomUnitDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> {
     private mountLifeCycleResult;
     private updateLifeCycleResult;
@@ -14,9 +14,9 @@ export declare class DomUnitDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemo
     onAfterUpdate(): void;
     onBeforeDispose(): void;
     provide(): IElement<TDomElement>;
-    getMountLifeCycleResult(): string;
-    getUpdateLifeCycleResult(): string;
-    getDisposeLifeCycleResult(): string;
-    changeOnBeforeUpdateReturn(value: boolean): void;
+    getMountLifeCycleResult(): IDomUnitLifeCycleResultOut;
+    getUpdateLifeCycleResult(): IDomUnitLifeCycleResultOut;
+    getDisposeLifeCycleResult(): IDomUnitLifeCycleResultOut;
+    setOnBeforeUpdateReturn(param: IDomUnitDemoSetOnBeforeUpdateReturnIn): void;
     getState(): IDomUnitDemoGetStateOut<IDomUnitDemoStates>;
 }

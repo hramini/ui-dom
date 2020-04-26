@@ -6,11 +6,14 @@ describe('@DomUnit / no override', (): void => {
 
     test(`expects mountLifeCycleResult to be ${mountLifeCycleText}`, (): void => {
       const domUnitView: DomUnitSimpleDemo = new DomUnitSimpleDemo();
+
       domUnitView.runMountLifeCycle({
         properties: {}
       });
 
-      expect(domUnitView.getMountLifeCycleResult()).toBe(mountLifeCycleText);
+      const { lifeCycleResult } = domUnitView.getMountLifeCycleResult();
+
+      expect(lifeCycleResult).toBe(mountLifeCycleText);
     });
   });
 
@@ -19,12 +22,15 @@ describe('@DomUnit / no override', (): void => {
 
     test(`expects updateLifeCycleResult to be ${updateLifeCycleText}`, (): void => {
       const domUnitView: DomUnitSimpleDemo = new DomUnitSimpleDemo();
+
       domUnitView.runMountLifeCycle({
         properties: {}
       });
       domUnitView.runUpdateLifeCycle({ properties: {} });
 
-      expect(domUnitView.getUpdateLifeCycleResult()).toBe(updateLifeCycleText);
+      const { lifeCycleResult } = domUnitView.getUpdateLifeCycleResult();
+
+      expect(lifeCycleResult).toBe(updateLifeCycleText);
     });
   });
 
@@ -33,9 +39,12 @@ describe('@DomUnit / no override', (): void => {
 
     test(`expects disposeLifeCycleResult to be ${disposeLifeCycleText}`, (): void => {
       const domUnitView: DomUnitSimpleDemo = new DomUnitSimpleDemo();
+
       domUnitView.runDisposeLifeCycle();
 
-      expect(domUnitView.getDisposeLifeCycleResult()).toBe(disposeLifeCycleText);
+      const { lifeCycleResult } = domUnitView.getDisposeLifeCycleResult();
+
+      expect(lifeCycleResult).toBe(disposeLifeCycleText);
     });
   });
 });

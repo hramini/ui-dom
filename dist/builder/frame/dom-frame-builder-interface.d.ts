@@ -2,14 +2,14 @@ import { IFrameElementOption } from 'ui-wrapper';
 import { TDomElement } from '../../type/element-type';
 import { DomUnit } from '../../unit/dom-unit-class';
 export interface IDomFrameBuilderCheckChildrenLengthOut {
-    status: boolean;
+    readonly status: boolean;
 }
 export interface IDomFrameBuilderAppendKeyPropertiesIn<P> {
-    properties: P;
+    readonly properties: P;
 }
 export interface IDomFrameBuilderAppendKeyPropertiesOut<P> {
-    properties: P;
+    readonly properties: P;
 }
 export interface IDomFrameElementOption<P, S> extends IFrameElementOption<TDomElement, P, S> {
-    UnitConstructor: new () => DomUnit<P, S>;
+    readonly UnitConstructor: new () => DomUnit<P, S>;
 }
