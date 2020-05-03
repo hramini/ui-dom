@@ -1,11 +1,12 @@
-import { IDomContainerGetInstanceOut, IDomContainerGetUnitIn, ITaggedUnit } from './dom-container-interface';
+import { IDomContainerExtractUnitIn, IDomContainerGetInstanceOut, ITaggedUnit } from './dom-container-interface';
 export declare class DomContainer {
     private static domContainer;
     private readonly units;
     private DomUnitConstructor;
     private properties;
     private constructor();
-    extractUnit(param: IDomContainerGetUnitIn): ITaggedUnit;
+    extractUnit(param: IDomContainerExtractUnitIn): ITaggedUnit;
+    private getUnits;
     private setUnit;
     private updateUnit;
     private checkUnitExistence;

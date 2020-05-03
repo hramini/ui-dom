@@ -1,6 +1,6 @@
 import { IBasicProperties, IElement, IUnit, IUnitAlterStateOptions, IUnitOnBeforeUpdateCheck } from 'ui-wrapper';
 import { VirtualDocument } from 'virtual-document';
-import { TDomElement } from '../type/element-type';
+import { TDomElement } from '../ui-dom-type';
 import { IDomUnitRunMountLifeCycleIn, IDomUnitRunUpdateLifeCycleIn } from './dom-unit-interface';
 export declare abstract class DomUnit<P, S> implements IUnit<TDomElement, P, S> {
     props: Readonly<P> & Readonly<IBasicProperties<TDomElement>>;

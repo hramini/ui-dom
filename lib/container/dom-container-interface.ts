@@ -1,5 +1,5 @@
 import { IBasicProperties, IBasicStates } from 'ui-wrapper';
-import { TDomElement } from '../type/element-type';
+import { TDomElement } from '../ui-dom-type';
 import { DomUnit } from '../unit/dom-unit-class';
 import { DomContainer } from './dom-container-class';
 
@@ -8,7 +8,7 @@ export interface IDomContainerGetInstanceOut {
 }
 
 export interface ITaggedUnit {
-  readonly unit: DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
+  readonly domUnit: DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
   updateTag: number;
   previousTag: number;
 }
@@ -17,9 +17,13 @@ export interface IUnitInstance {
   [name: string]: ITaggedUnit;
 }
 
-export interface IDomContainerGetUnitIn {
+export interface IDomContainerExtractUnitIn {
   readonly DomUnitConstructor: new () => DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
   readonly properties: IBasicProperties<TDomElement>;
+}
+
+export interface IDomContainerGetUnitsOut {
+  units: IUnitInstance;
 }
 
 export interface IDomContainerCheckUnitExistenceOut {
@@ -31,7 +35,7 @@ export interface IDomContainerGetNewUpdateTagOut {
 }
 
 export interface IDomContainerUpdateUnitTagOut {
-  readonly unitInstance: DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
+  readonly domUnit: DomUnit<IBasicProperties<TDomElement>, IBasicStates>;
 }
 
 export interface IDomContainerGetUnitKeyNameOut {

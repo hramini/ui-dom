@@ -1,5 +1,5 @@
 import { IPrimer, IPrimerElement, IPrimerTarget, IPrimerUnitPrototype, IUnit } from 'ui-wrapper';
-import { TDomElement } from '../type/element-type';
+import { TDomElement } from '../ui-dom-type';
 export declare class DomPrimer implements IPrimer<TDomElement> {
     element: TDomElement;
     target: HTMLElement;

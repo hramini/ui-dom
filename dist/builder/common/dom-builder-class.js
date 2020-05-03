@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const virtual_document_1 = require("virtual-document");
 class DomBuilder {
     constructor() {
-        this.virtualDom = new virtual_document_1.VirtualDocument();
+        this.doc = new virtual_document_1.VirtualDocument({ doc: document });
     }
     static checkTypeOf(param) {
         const { value, type } = param;

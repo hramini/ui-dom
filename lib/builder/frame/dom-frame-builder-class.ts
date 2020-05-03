@@ -1,26 +1,24 @@
 import { IBasicProperties, IElement, IFrameBuilder } from 'ui-wrapper';
 import { VirtualDocument } from 'virtual-document';
 import { DomContainer } from '../../container/dom-container-class';
-import { TDomElement } from '../../type/element-type';
+import { TDomElement } from '../../ui-dom-type';
 import { DomBuilder } from '../common/dom-builder-class';
 import {
   IDomFrameBuilderAppendKeyPropertiesIn,
+  IDomFrameBuilderProvideElementIn,
+  IDomFrameBuilderProvideElementOut,
   IDomFrameElementOption
 } from './dom-frame-builder-interface';
 
 export class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomElement> {
-  private readonly doc: VirtualDocument;
-
   public constructor() {
     super();
-    this.doc = new VirtualDocument();
   }
 
   public buildElement<P extends IBasicProperties<TDomElement>, S>(
     param: IDomFrameElementOption<P, S>
   ): IElement<TDomElement> {
-    const { UnitConstructor, children } = param;
-    const { properties } = param;
+    const { UnitConstructor, children, properties } = param;
 
     DomBuilder.appendChildrenToProperties<P>({
       children,
@@ -31,15 +29,25 @@ export class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomEle
       properties
     });
 
+    const { unitElement } = this.provideElement({ UnitConstructor, properties });
+
+    return { element: unitElement };
+  }
+
+  private provideElement<P, S>(
+    param: IDomFrameBuilderProvideElementIn<P, S>
+  ): IDomFrameBuilderProvideElementOut {
+    const { doc } = this;
+    const { UnitConstructor, properties } = param;
     const { domContainer } = DomContainer.getInstance();
-    const { unit: unitInstance, previousTag, updateTag } = domContainer.extractUnit({
+    const { domUnit, previousTag, updateTag } = domContainer.extractUnit({
       DomUnitConstructor: UnitConstructor,
       properties
     });
-    const { element: unitElement } = this.doc.createNewElement({
+    const { element } = domUnit.getProvidedView();
+    const { element: unitElement } = doc.createNewElement({
       tagName: `${UnitConstructor.name.toLowerCase()}-unit`
     });
-    const { element } = unitInstance.getProvidedView();
 
     VirtualDocument.append({
       appendTo: unitElement,
@@ -56,7 +64,7 @@ export class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomEle
       element: unitElement
     });
 
-    return { element: unitElement };
+    return { unitElement };
   }
 
   private static appendKeyProperties<P extends IBasicProperties<TDomElement>>(

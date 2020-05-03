@@ -6,11 +6,9 @@ const dom_builder_class_1 = require("../common/dom-builder-class");
 class DomFrameBuilder extends dom_builder_class_1.DomBuilder {
     constructor() {
         super();
-        this.doc = new virtual_document_1.VirtualDocument();
     }
     buildElement(param) {
-        const { UnitConstructor, children } = param;
-        const { properties } = param;
+        const { UnitConstructor, children, properties } = param;
         dom_builder_class_1.DomBuilder.appendChildrenToProperties({
             children,
             properties
@@ -18,15 +16,21 @@ class DomFrameBuilder extends dom_builder_class_1.DomBuilder {
         DomFrameBuilder.appendKeyProperties({
             properties
         });
+        const { unitElement } = this.provideElement({ UnitConstructor, properties });
+        return { element: unitElement };
+    }
+    provideElement(param) {
+        const { doc } = this;
+        const { UnitConstructor, properties } = param;
         const { domContainer } = dom_container_class_1.DomContainer.getInstance();
-        const { unit: unitInstance, previousTag, updateTag } = domContainer.extractUnit({
+        const { domUnit, previousTag, updateTag } = domContainer.extractUnit({
             DomUnitConstructor: UnitConstructor,
             properties
         });
-        const { element: unitElement } = this.doc.createNewElement({
+        const { element } = domUnit.getProvidedView();
+        const { element: unitElement } = doc.createNewElement({
             tagName: `${UnitConstructor.name.toLowerCase()}-unit`
         });
-        const { element } = unitInstance.getProvidedView();
         virtual_document_1.VirtualDocument.append({
             appendTo: unitElement,
             element
@@ -41,7 +45,7 @@ class DomFrameBuilder extends dom_builder_class_1.DomBuilder {
             attributeValue: updateTag.toString(),
             element: unitElement
         });
-        return { element: unitElement };
+        return { unitElement };
     }
     static appendKeyProperties(param) {
         const { properties } = param;

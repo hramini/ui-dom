@@ -1,6 +1,6 @@
 import { IElement } from 'ui-wrapper';
 import { VirtualDocument } from 'virtual-document';
-import { TDomElement } from '../type/element-type';
+import { TDomElement } from '../ui-dom-type';
 import { DomUnit } from './dom-unit-class';
 import {
   IDomUnitDemoProps,

@@ -1,4 +1,4 @@
-import { TDomElement } from '../../type/element-type';
+import { TDomElement } from '../../ui-dom-type';
 export interface IDomBuilderCheckChildrenIn {
     readonly children?: (string | TDomElement)[];
 }

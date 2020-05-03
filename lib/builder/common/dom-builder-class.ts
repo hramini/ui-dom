@@ -1,6 +1,6 @@
 import { IBasicProperties } from 'ui-wrapper';
 import { VirtualDocument } from 'virtual-document';
-import { TDomElement } from '../../type/element-type';
+import { TDomElement } from '../../ui-dom-type';
 import {
   IDomBuilderAppendChildrenToPropertiesIn,
   IDomBuilderCheckChildrenIn,
@@ -10,10 +10,10 @@ import {
 } from './dom-builder-interface';
 
 export abstract class DomBuilder {
-  protected virtualDom: VirtualDocument;
+  protected doc: VirtualDocument;
 
   protected constructor() {
-    this.virtualDom = new VirtualDocument();
+    this.doc = new VirtualDocument({ doc: document });
   }
 
   // TODO: this method will be removed after validator class being ready to uses

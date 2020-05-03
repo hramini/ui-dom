@@ -8,7 +8,7 @@ import {
   IUnitOnBeforeUpdateCheck
 } from 'ui-wrapper';
 import { VirtualDocument } from 'virtual-document';
-import { TDomElement } from '../type/element-type';
+import { TDomElement } from '../ui-dom-type';
 import {
   IDomUnitRunMountLifeCycleIn,
   IDomUnitRunUpdateLifeCycleIn,

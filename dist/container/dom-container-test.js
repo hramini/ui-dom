@@ -18,17 +18,17 @@ describe('@DomContainer', () => {
         const mountLifeCycleText = 'CBpPAp';
         const updateLifeCycleText = 'BuPAu';
         test(`expects mountLifeCycleText to be ${mountLifeCycleText} after getting unit for the first time`, () => {
-            const { unit } = domContainer.extractUnit({
+            const { domUnit } = domContainer.extractUnit({
                 DomUnitConstructor: dom_unit_demo_class_1.DomUnitDemo,
                 properties: { key: 1 }
             });
-            const domUnit = unit;
-            const { lifeCycleResult } = domUnit.getMountLifeCycleResult();
+            const domUnitDemo = domUnit;
+            const { lifeCycleResult } = domUnitDemo.getMountLifeCycleResult();
             expect(lifeCycleResult).toBe(mountLifeCycleText);
         });
         test(`expects updateLifeCycleText to be ${updateLifeCycleText} after getting unit for the second and more time`, () => {
             domContainer.extractUnit({ DomUnitConstructor: dom_unit_demo_class_1.DomUnitDemo, properties: {} });
-            const { unit: updatedUnit } = domContainer.extractUnit({
+            const { domUnit: updatedUnit } = domContainer.extractUnit({
                 DomUnitConstructor: dom_unit_demo_class_1.DomUnitDemo,
                 properties: {}
             });

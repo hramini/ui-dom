@@ -1,4 +1,4 @@
-import { TDomElement } from '../../type/element-type';
+import { TDomElement } from '../../ui-dom-type';
 
 export interface IDomTagBuilderAppendPropertiesIn<P> {
   readonly element: TDomElement;
@@ -10,5 +10,6 @@ export interface IDomTagBuilderAppendChildrenIn {
   readonly children?: (string | TDomElement)[];
 }
 
+// TODO: this type definition will be removed after using iterator instead of forEach in my code
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 export type PropertyEntriesType = [string, string | Function];

@@ -1,6 +1,6 @@
 import { IElement, IFrameBuilder } from 'ui-wrapper';
 import { DomFrameBuilder } from '../builder/frame/dom-frame-builder-class';
-import { TDomElement } from '../type/element-type';
+import { TDomElement } from '../ui-dom-type';
 import { DomUnit } from './dom-unit-class';
 import { DomUnitDemo } from './dom-unit-demo-class';
 import { IDomUnitDemoProps, IDomUnitDemoStates } from './dom-unit-demo-interface';

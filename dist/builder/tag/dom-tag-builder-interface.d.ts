@@ -1,4 +1,4 @@
-import { TDomElement } from '../../type/element-type';
+import { TDomElement } from '../../ui-dom-type';
 export interface IDomTagBuilderAppendPropertiesIn<P> {
     readonly element: TDomElement;
     readonly properties: P;

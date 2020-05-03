@@ -22,7 +22,7 @@ export interface IDomBuilderCheckTypeOfOut {
 	readonly status: boolean;
 }
 declare abstract class DomBuilder {
-	protected virtualDom: VirtualDocument;
+	protected doc: VirtualDocument;
 	protected constructor();
 	protected static checkTypeOf<T>(param: IDomBuilderCheckTypeOfIn<T>): IDomBuilderCheckTypeOfOut;
 	protected static checkChildren(param: IDomBuilderCheckChildrenIn): IDomBuilderCheckChildrenOut;
@@ -59,13 +59,12 @@ export interface IDomFrameElementOption<P, S> extends IFrameElementOption<TDomEl
 	readonly UnitConstructor: new () => DomUnit<P, S>;
 }
 export declare class DomFrameBuilder extends DomBuilder implements IFrameBuilder<TDomElement> {
-	private readonly doc;
 	constructor();
 	buildElement<P extends IBasicProperties<TDomElement>, S>(param: IDomFrameElementOption<P, S>): IElement<TDomElement>;
+	private provideElement;
 	private static appendKeyProperties;
 }
 export declare class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement> {
-	private readonly virtualDocument;
 	constructor();
 	buildElement<P extends IBasicProperties<TDomElement>>(param: ITagElementOption<TDomElement, P>): IElement<TDomElement>;
 	private static appendChildren;

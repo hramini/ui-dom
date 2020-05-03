@@ -5,13 +5,11 @@ const dom_builder_class_1 = require("../common/dom-builder-class");
 class DomTagBuilder extends dom_builder_class_1.DomBuilder {
     constructor() {
         super();
-        this.virtualDocument = new virtual_document_1.VirtualDocument({
-            doc: document
-        });
     }
     buildElement(param) {
+        const { doc } = this;
         const { name, properties, children } = param;
-        const { element } = this.virtualDocument.createNewElement({ tagName: name });
+        const { element } = doc.createNewElement({ tagName: name });
         DomTagBuilder.appendProperties({ element, properties });
         dom_builder_class_1.DomBuilder.appendChildrenToProperties({ children, properties });
         const { children: childrenProperty } = properties;

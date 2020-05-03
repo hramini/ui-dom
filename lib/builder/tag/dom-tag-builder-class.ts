@@ -1,6 +1,6 @@
 import { IBasicProperties, IElement, ITagBuilder, ITagElementOption } from 'ui-wrapper';
 import { VirtualDocument } from 'virtual-document';
-import { TDomElement } from '../../type/element-type';
+import { TDomElement } from '../../ui-dom-type';
 import { DomBuilder } from '../common/dom-builder-class';
 import {
   IDomTagBuilderAppendChildrenIn,
@@ -9,21 +9,16 @@ import {
 } from './dom-tag-builder-interface';
 
 export class DomTagBuilder extends DomBuilder implements ITagBuilder<TDomElement> {
-  private readonly virtualDocument: VirtualDocument;
-
   public constructor() {
     super();
-
-    this.virtualDocument = new VirtualDocument({
-      doc: document
-    });
   }
 
   public buildElement<P extends IBasicProperties<TDomElement>>(
     param: ITagElementOption<TDomElement, P>
   ): IElement<TDomElement> {
+    const { doc } = this;
     const { name, properties, children } = param;
-    const { element } = this.virtualDocument.createNewElement({ tagName: name });
+    const { element } = doc.createNewElement({ tagName: name });
 
     DomTagBuilder.appendProperties<P>({ element, properties });
     DomBuilder.appendChildrenToProperties({ children, properties });

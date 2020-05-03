@@ -23,12 +23,12 @@ describe('@DomContainer', (): void => {
     const updateLifeCycleText: string = 'BuPAu';
 
     test(`expects mountLifeCycleText to be ${mountLifeCycleText} after getting unit for the first time`, (): void => {
-      const { unit } = domContainer.extractUnit({
+      const { domUnit } = domContainer.extractUnit({
         DomUnitConstructor: DomUnitDemo,
         properties: { key: 1 }
       });
-      const domUnit: DomUnitDemo = unit as DomUnitDemo;
-      const { lifeCycleResult } = domUnit.getMountLifeCycleResult();
+      const domUnitDemo: DomUnitDemo = domUnit as DomUnitDemo;
+      const { lifeCycleResult } = domUnitDemo.getMountLifeCycleResult();
 
       expect(lifeCycleResult).toBe(mountLifeCycleText);
     });
@@ -36,7 +36,7 @@ describe('@DomContainer', (): void => {
     test(`expects updateLifeCycleText to be ${updateLifeCycleText} after getting unit for the second and more time`, (): void => {
       domContainer.extractUnit({ DomUnitConstructor: DomUnitDemo, properties: {} });
 
-      const { unit: updatedUnit } = domContainer.extractUnit({
+      const { domUnit: updatedUnit } = domContainer.extractUnit({
         DomUnitConstructor: DomUnitDemo,
         properties: {}
       });

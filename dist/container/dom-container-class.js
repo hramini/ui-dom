@@ -16,40 +16,48 @@ class DomContainer {
             this.setUnit();
         }
         const { unitKeyName } = this.getUnitKeyName();
-        const { unit: registeredUnit, updateTag, previousTag } = this.units[unitKeyName];
-        return { previousTag, unit: registeredUnit, updateTag };
+        const { units } = this.getUnits();
+        const { [unitKeyName]: taggedUnit } = units;
+        const { domUnit, updateTag, previousTag } = taggedUnit;
+        return { domUnit, previousTag, updateTag };
+    }
+    getUnits() {
+        const { units } = this;
+        return { units };
     }
     setUnit() {
-        const { properties } = this;
-        const { DomUnitConstructor } = this;
-        const domUnitInstance = new DomUnitConstructor();
-        domUnitInstance.runMountLifeCycle({ properties });
+        const { properties, DomUnitConstructor } = this;
+        const domUnit = new DomUnitConstructor();
+        domUnit.runMountLifeCycle({ properties });
         const { updateTag } = DomContainer.getNewUpdateTag();
         const { unitKeyName } = this.getUnitKeyName();
-        this.units[unitKeyName] = {
+        const { units } = this.getUnits();
+        units[unitKeyName] = {
+            domUnit,
             previousTag: 0,
-            unit: domUnitInstance,
             updateTag
         };
     }
     updateUnit() {
         const { properties } = this;
-        const { unitInstance } = this.updateUnitTag();
-        unitInstance.runUpdateLifeCycle({ properties });
+        const { domUnit } = this.updateUnitTag();
+        domUnit.runUpdateLifeCycle({ properties });
     }
     checkUnitExistence() {
         const { unitKeyName } = this.getUnitKeyName();
-        const { [unitKeyName]: taggedUnit } = this.units;
+        const { units } = this.getUnits();
+        const { [unitKeyName]: taggedUnit } = units;
         return { status: !!taggedUnit };
     }
     updateUnitTag() {
         const { unitKeyName } = this.getUnitKeyName();
-        const { [unitKeyName]: taggedUnit } = this.units;
-        const { unit: unitInstance } = taggedUnit;
-        taggedUnit.previousTag = taggedUnit.updateTag;
-        const { updateTag } = DomContainer.getNewUpdateTag();
-        taggedUnit.updateTag = updateTag;
-        return { unitInstance };
+        const { units } = this.getUnits();
+        const { [unitKeyName]: taggedUnit } = units;
+        const { domUnit, updateTag } = taggedUnit;
+        taggedUnit.previousTag = updateTag;
+        const { updateTag: newUpdateTag } = DomContainer.getNewUpdateTag();
+        taggedUnit.updateTag = newUpdateTag;
+        return { domUnit };
     }
     getUnitKeyName() {
         const { properties, DomUnitConstructor } = this;

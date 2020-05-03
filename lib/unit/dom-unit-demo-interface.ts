@@ -1,5 +1,5 @@
 import { IBasicProperties, IBasicStates } from 'ui-wrapper';
-import { TDomElement } from '../type/element-type';
+import { TDomElement } from '../ui-dom-type';
 
 export interface IDomUnitDemoProps extends IBasicProperties<TDomElement> {
   readonly title?: string;

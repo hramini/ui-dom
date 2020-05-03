@@ -1,6 +1,6 @@
 import { IElement, IUnitOnBeforeUpdateCheck } from 'ui-wrapper';
 import { VirtualDocument } from 'virtual-document';
-import { TDomElement } from '../type/element-type';
+import { TDomElement } from '../ui-dom-type';
 import { DomUnit } from './dom-unit-class';
 import {
   IDomUnitDemoGetStateOut,
@@ -38,6 +38,7 @@ export class DomUnitDemo extends DomUnit<IDomUnitDemoProps, IDomUnitDemoStates> 
 
   public onBeforeUpdate(): IUnitOnBeforeUpdateCheck {
     const { onBeforeUpdateReturn } = this;
+
     this.updateLifeCycleResult = 'Bu';
 
     return { shouldUpdate: onBeforeUpdateReturn };
